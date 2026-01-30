@@ -1,0 +1,7 @@
+{
+    "name": "dps-project",
+    "version": "1.0.0",
+    "scripts": {
+        "start": "echo 'No start script specified'"
+    }
+}

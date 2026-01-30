@@ -1,0 +1,451 @@
+/* CSS Variables for Theme */
+:root {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f5f5f7;
+    --bg-card: #ffffff;
+    --text-primary: #1d1d1f;
+    --text-secondary: #6e6e73;
+    --border-color: #d2d2d7;
+    --accent-color: #0071e3;
+    --accent-hover: #0077ed;
+    --input-bg: #ffffff;
+    --shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 4px 20px rgba(0, 0, 0, 0.1);
+    --step-bg: #f8f9fa;
+    --section-border: #e5e5e7;
+    --code-bg: #f5f5f7;
+    --highlight-color: #0071e3;
+}
+
+[data-theme="dark"] {
+    --bg-primary: #1d1d1f;
+    --bg-secondary: #2d2d2f;
+    --bg-card: #2d2d2f;
+    --text-primary: #f5f5f7;
+    --text-secondary: #a1a1a6;
+    --border-color: #424245;
+    --accent-color: #2997ff;
+    --accent-hover: #40a9ff;
+    --input-bg: #3a3a3c;
+    --shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 4px 20px rgba(0, 0, 0, 0.4);
+    --step-bg: #3a3a3c;
+    --section-border: #424245;
+    --code-bg: #2d2d2f;
+    --highlight-color: #2997ff;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.6;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+/* Header */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+h1 {
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+}
+
+.subtitle {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+    font-weight: 400;
+}
+
+.theme-toggle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    padding: 8px 16px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--bg-card);
+    color: var(--text-primary);
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+.theme-toggle:hover {
+    border-color: var(--accent-color);
+}
+
+.theme-toggle svg {
+    width: 18px;
+    height: 18px;
+}
+
+/* Sections */
+.input-section {
+    background: var(--bg-card);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border-color);
+}
+
+.section-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: var(--text-primary);
+}
+
+/* Array Input Container */
+.array-container {
+    margin-bottom: 20px;
+}
+
+.array-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+}
+
+.array-boxes {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+}
+
+.array-box {
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    font-size: 16px;
+    font-family: 'SF Mono', Monaco, 'Courier New', monospace;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background: var(--input-bg);
+    color: var(--text-primary);
+    transition: border-color 0.2s ease;
+}
+
+.array-box:focus {
+    outline: none;
+    border-color: var(--accent-color);
+}
+
+.array-box.small {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+}
+
+/* 2D Matrix Grid for S-boxes */
+.matrix-container {
+    margin-bottom: 20px;
+}
+
+.matrix-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+}
+
+.matrix-grid {
+    display: inline-grid;
+    grid-template-columns: repeat(4, 60px);
+    gap: 6px;
+    padding: 12px;
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+.matrix-box {
+    width: 60px;
+    height: 36px;
+    text-align: center;
+    font-size: 14px;
+    font-family: 'SF Mono', Monaco, 'Courier New', monospace;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    background: var(--input-bg);
+    color: var(--text-primary);
+    transition: border-color 0.2s ease;
+}
+
+.matrix-box:focus {
+    outline: none;
+    border-color: var(--accent-color);
+}
+
+/* Inline arrays */
+.inline-arrays {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+}
+
+.inline-arrays .array-container {
+    margin-bottom: 0;
+}
+
+/* Button */
+.encrypt-btn {
+    width: 100%;
+    padding: 14px 24px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #ffffff;
+    background: var(--accent-color);
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    margin-top: 10px;
+}
+
+.encrypt-btn:hover {
+    background: var(--accent-hover);
+}
+
+.encrypt-btn:active {
+    transform: scale(0.98);
+}
+
+.encrypt-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Results Section */
+.results-section {
+    background: var(--bg-card);
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border-color);
+    display: none;
+    margin-top: 24px;
+}
+
+.results-section.visible {
+    display: block;
+}
+
+/* Detailed Results Styling */
+.result-section {
+    margin-bottom: 32px;
+    padding-bottom: 24px;
+    border-bottom: 2px solid var(--section-border);
+}
+
+.result-section:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.section-header {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--accent-color);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.section-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background: var(--accent-color);
+    color: white;
+    border-radius: 50%;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.subsection {
+    margin-bottom: 20px;
+    margin-left: 40px;
+}
+
+.subsection-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 10px;
+    padding-left: 12px;
+    border-left: 3px solid var(--accent-color);
+}
+
+.step-content {
+    font-family: 'SF Mono', Monaco, 'Courier New', monospace;
+    font-size: 13px;
+    line-height: 1.7;
+    background: var(--code-bg);
+    padding: 16px 20px;
+    border-radius: 8px;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+
+/* Error */
+.error {
+    background: #fee2e2;
+    color: #dc2626;
+    padding: 16px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+[data-theme="dark"] .error {
+    background: #471f1f;
+    color: #f87171;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .container {
+        padding: 20px 16px;
+    }
+
+    header {
+        flex-direction: column;
+        gap: 16px;
+        align-items: flex-start;
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+
+    .section-title {
+        font-size: 16px;
+    }
+
+    .array-box {
+        width: 36px;
+        height: 36px;
+        font-size: 14px;
+    }
+
+    .array-box.small {
+        width: 30px;
+        height: 30px;
+        font-size: 13px;
+    }
+
+    .matrix-grid {
+        grid-template-columns: repeat(4, 52px);
+        gap: 4px;
+        padding: 10px;
+    }
+
+    .matrix-box {
+        width: 52px;
+        height: 34px;
+        font-size: 13px;
+    }
+
+    .inline-arrays {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .subsection {
+        margin-left: 0;
+    }
+
+    .step-content {
+        font-size: 11px;
+        padding: 12px;
+    }
+
+    .section-header {
+        font-size: 15px;
+    }
+
+    .subsection-title {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 16px 12px;
+    }
+
+    h1 {
+        font-size: 20px;
+    }
+
+    .array-box {
+        width: 32px;
+        height: 32px;
+        font-size: 13px;
+    }
+
+    .array-box.small {
+        width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+
+    .matrix-grid {
+        grid-template-columns: repeat(4, 44px);
+        gap: 3px;
+        padding: 8px;
+    }
+
+    .matrix-box {
+        width: 44px;
+        height: 30px;
+        font-size: 12px;
+    }
+
+    .input-section {
+        padding: 16px;
+    }
+
+    .encrypt-btn {
+        padding: 12px 20px;
+        font-size: 15px;
+    }
+
+    .step-content {
+        font-size: 10px;
+        padding: 10px;
+        line-height: 1.5;
+    }
+}
