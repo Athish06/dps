@@ -716,6 +716,18 @@ h1 {
     header {
         margin-bottom: 24px;
         padding-bottom: 16px;
+        flex-wrap: nowrap;
+        gap: 12px;
+    }
+
+    header>div {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .theme-toggle {
+        flex-shrink: 0;
+        margin-left: auto;
     }
 
     .back-link {
