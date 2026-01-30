@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="DPS - S-DES, RSA, and Hill Cipher with step-by-step calculations">
+    <meta name="description" content="DPS - Cryptography Tools with step-by-step calculations">
     <title>DPS</title>
     <link rel="icon"
         href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔐</text></svg>">
@@ -16,7 +16,7 @@
         <header>
             <div>
                 <h1>DPS</h1>
-                <p class="subtitle">By Athish, Aagash</p>
+                <p class="subtitle">chummah pannom</p>
             </div>
             <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
                 <svg id="sunIcon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -33,21 +33,46 @@
             </button>
         </header>
 
-        <div class="cipher-grid">
-            <a href="sdes.html" class="cipher-card">
-                <h2>S-DES</h2>
-                <p>Simplified Data Encryption Standard with detailed step-by-step encryption process</p>
-            </a>
+        <!-- CO-1 Section -->
+        <div class="cipher-category">
+            <h2 class="category-header">CO-1</h2>
+            <div class="cipher-grid">
+                <a href="sdes.html" class="cipher-card">
+                    <h2>S-DES</h2>
+                    <p>Simplified Data Encryption Standard with detailed step-by-step encryption process</p>
+                </a>
 
-            <a href="rsa.html" class="cipher-card">
-                <h2>RSA</h2>
-                <p>Asymmetric encryption with modular exponentiation and key generation</p>
-            </a>
+                <a href="hill.html" class="cipher-card">
+                    <h2>Hill Cipher</h2>
+                    <p>Matrix-based encryption with dynamic m×m key matrix</p>
+                </a>
 
-            <a href="hill.html" class="cipher-card">
-                <h2>Hill Cipher</h2>
-                <p>Matrix-based encryption with dynamic m×m key matrix</p>
-            </a>
+                <a href="playfair.html" class="cipher-card">
+                    <h2>Playfair Cipher</h2>
+                    <p>5×5 matrix cipher with three encryption rules (Same Row, Same Column, Rectangle)</p>
+                </a>
+
+                <a href="monoalphabetic.html" class="cipher-card">
+                    <h2>Monoalphabetic Cipher</h2>
+                    <p>Additive, Multiplicative, and Affine modes with Extended Euclidean Algorithm</p>
+                </a>
+
+                <a href="adfgvx.html" class="cipher-card">
+                    <h2>ADFGVX Cipher</h2>
+                    <p>WWI cipher with Polybius square substitution and columnar transposition</p>
+                </a>
+            </div>
+        </div>
+
+        <!-- CO-2 Section -->
+        <div class="cipher-category">
+            <h2 class="category-header">CO-2</h2>
+            <div class="cipher-grid">
+                <a href="rsa.html" class="cipher-card">
+                    <h2>RSA</h2>
+                    <p>Asymmetric encryption with modular exponentiation and key generation</p>
+                </a>
+            </div>
         </div>
     </div>
 

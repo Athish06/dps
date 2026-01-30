@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Monoalphabetic Cipher - Additive, Multiplicative, and Affine modes with step-by-step calculations">
+    <title>Monoalphabetic Cipher</title>
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔐</text></svg>">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div>
+                <a href="index.html" class="back-link">← Back</a>
+                <h1>Monoalphabetic Cipher</h1>
+                <p class="subtitle">chummah pannom</p>
+            </div>
+            <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                <svg id="sunIcon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+                <svg id="moonIcon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor" style="display: none;">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                </svg>
+                <span id="themeText">Dark</span>
+            </button>
+        </header>
+
+        <!-- Input Section -->
+        <div class="input-section">
+            <h2 class="section-title">Cipher Parameters</h2>
+
+            <div class="input-row">
+                <div class="input-group" style="flex: 2;">
+                    <label class="input-label">Plaintext</label>
+                    <input type="text" class="text-input" id="plaintext" value="hello" placeholder="Enter text...">
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">Mode</label>
+                    <select class="text-input" id="cipherMode">
+                        <option value="additive">Additive (Caesar)</option>
+                        <option value="multiplicative">Multiplicative</option>
+                        <option value="affine">Affine</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">Operation</label>
+                    <select class="text-input" id="operation">
+                        <option value="encrypt">Encrypt</option>
+                        <option value="decrypt">Decrypt</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="input-row" id="keyRow">
+                <div class="input-group" id="keyKGroup">
+                    <label class="input-label">Key (k)</label>
+                    <input type="number" class="number-input" id="keyK" value="3" min="1" max="25">
+                </div>
+
+                <div class="input-group" id="keyAGroup" style="display: none;">
+                    <label class="input-label">Key a (coprime with 26)</label>
+                    <input type="number" class="number-input" id="keyA" value="5" min="1" max="25">
+                </div>
+
+                <div class="input-group" id="keyBGroup" style="display: none;">
+                    <label class="input-label">Key b</label>
+                    <input type="number" class="number-input" id="keyB" value="8" min="0" max="25">
+                </div>
+            </div>
+
+            <div class="info-box" id="modeInfo">
+                <strong>Additive Cipher (Caesar):</strong>
+                <p>E(x) = (x + k) mod 26 &nbsp;|&nbsp; D(x) = (x - k) mod 26</p>
+            </div>
+        </div>
+
+        <button class="encrypt-btn" id="encryptBtn">Process</button>
+
+        <!-- Results -->
+        <div class="results-section" id="resultsSection">
+            <h2 class="section-title">Step-by-Step Monoalphabetic Process</h2>
+            <div id="resultsContent"></div>
+        </div>
+    </div>
+
+    <script src="common.js"></script>
+    <script src="monoalphabetic.js"></script>
+</body>
+
+</html>

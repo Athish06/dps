@@ -24,6 +24,18 @@
             "dest": "/api/hill.py"
         },
         {
+            "src": "/api/playfair",
+            "dest": "/api/playfair.py"
+        },
+        {
+            "src": "/api/monoalphabetic",
+            "dest": "/api/monoalphabetic.py"
+        },
+        {
+            "src": "/api/adfgvx",
+            "dest": "/api/adfgvx.py"
+        },
+        {
             "src": "/(.*)",
             "dest": "/public/$1"
         }

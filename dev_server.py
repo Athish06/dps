@@ -497,6 +497,29 @@ class DevHandler(http.server.SimpleHTTPRequestHandler):
                 m = data.get('m', 3)
                 result = hill_cipher_detailed(plaintext, key_matrix, m)
             
+            elif self.path == '/api/playfair':
+                from playfair import playfair_cipher_detailed
+                plaintext = data.get('plaintext', 'instruments')
+                keyword = data.get('keyword', 'monarchy')
+                result = playfair_cipher_detailed(plaintext, keyword)
+            
+            elif self.path == '/api/monoalphabetic':
+                from monoalphabetic import monoalphabetic_cipher_detailed
+                plaintext = data.get('plaintext', 'hello')
+                mode = data.get('mode', 'additive')
+                operation = data.get('operation', 'encrypt')
+                key_k = data.get('key_k', 3)
+                key_a = data.get('key_a', 5)
+                key_b = data.get('key_b', 8)
+                result = monoalphabetic_cipher_detailed(plaintext, mode, key_k=key_k, key_a=key_a, key_b=key_b, operation=operation)
+            
+            elif self.path == '/api/adfgvx':
+                from adfgvx import adfgvx_cipher_detailed
+                plaintext = data.get('plaintext', 'attackat1200am')
+                grid_key = data.get('grid_key', 'privacy')
+                trans_key = data.get('trans_key', 'cipher')
+                result = adfgvx_cipher_detailed(plaintext, grid_key, trans_key)
+            
             else:
                 self.send_response(404)
                 self.end_headers()

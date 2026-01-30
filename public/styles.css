@@ -46,7 +46,16 @@ body {
     background-color: var(--bg-primary);
     color: var(--text-primary);
     line-height: 1.6;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    transition: none;
+}
+
+/* Smooth transitions only after page load */
+body.theme-loaded {
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+body.theme-loaded * {
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
 .container {
@@ -89,7 +98,7 @@ h1 {
     background: var(--bg-card);
     color: var(--text-primary);
     font-size: 14px;
-    transition: all 0.2s ease;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .theme-toggle:hover {
@@ -99,6 +108,11 @@ h1 {
 .theme-toggle svg {
     width: 18px;
     height: 18px;
+    flex-shrink: 0;
+}
+
+.theme-toggle #themeText {
+    display: inline;
 }
 
 /* Back Link */
@@ -190,10 +204,25 @@ h1 {
     transition: border-color 0.2s;
 }
 
+.number-input {
+    -webkit-appearance: none;
+    -moz-appearance: textfield;
+    appearance: textfield;
+    text-align: center;
+    font-weight: 600;
+}
+
+.number-input::-webkit-inner-spin-button,
+.number-input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
 .number-input:focus,
 .text-input:focus {
     outline: none;
     border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.15);
 }
 
 .small-btn {
@@ -255,6 +284,40 @@ h1 {
     margin-bottom: 24px;
     box-shadow: var(--shadow);
     border: 1px solid var(--border-color);
+}
+
+/* Info Box for cipher rules */
+.info-box {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-top: 16px;
+    font-size: 14px;
+}
+
+.info-box strong {
+    color: var(--accent-color);
+}
+
+.info-box ul {
+    margin: 10px 0 0 20px;
+    padding: 0;
+}
+
+.info-box li {
+    margin: 6px 0;
+    line-height: 1.5;
+}
+
+.info-box p {
+    margin: 8px 0 0 0;
+    color: var(--text-secondary);
+}
+
+.info-box em {
+    font-size: 12px;
+    color: var(--text-secondary);
 }
 
 .section-title {
@@ -549,11 +612,30 @@ h1 {
 
 @media (max-width: 480px) {
     .container {
-        padding: 16px 12px;
+        padding: 20px 16px;
     }
 
     h1 {
-        font-size: 20px;
+        font-size: 22px;
+    }
+
+    .subtitle {
+        font-size: 13px;
+    }
+
+    /* Icon-only theme toggle on mobile */
+    .theme-toggle {
+        padding: 10px;
+        gap: 0;
+    }
+
+    .theme-toggle #themeText {
+        display: none;
+    }
+
+    .theme-toggle svg {
+        width: 20px;
+        height: 20px;
     }
 
     .array-box {
@@ -584,14 +666,86 @@ h1 {
         padding: 16px;
     }
 
-    .encrypt-btn {
-        padding: 12px 20px;
+    .input-row {
+        gap: 12px;
+    }
+
+    .input-group {
+        min-width: 100%;
+    }
+
+    .number-input,
+    .text-input {
+        padding: 10px 12px;
         font-size: 15px;
+    }
+
+    .encrypt-btn {
+        padding: 14px 24px;
+        font-size: 15px;
+        width: 100%;
     }
 
     .step-content {
         font-size: 10px;
         padding: 10px;
         line-height: 1.5;
+    }
+
+    .cipher-card {
+        padding: 20px;
+    }
+
+    .cipher-card h2 {
+        font-size: 18px;
+    }
+
+    .cipher-card p {
+        font-size: 13px;
+    }
+
+    .info-box {
+        padding: 12px 14px;
+        font-size: 13px;
+    }
+
+    .info-box li {
+        font-size: 12px;
+    }
+
+    header {
+        margin-bottom: 24px;
+        padding-bottom: 16px;
+    }
+
+    .back-link {
+        font-size: 13px;
+    }
+}
+
+/* Category Section Styles for CO-1/CO-2 */
+.cipher-category {
+    margin-bottom: 32px;
+}
+
+.category-header {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border-color);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+@media (max-width: 480px) {
+    .category-header {
+        font-size: 14px;
+        margin-bottom: 12px;
+    }
+
+    .cipher-category {
+        margin-bottom: 24px;
     }
 }

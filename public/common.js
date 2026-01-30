@@ -1,10 +1,20 @@
 // Common JavaScript for all cipher pages
 
-// Theme Management
+// Theme Management - Apply theme immediately before DOM renders
+(function () {
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+})();
+
 function initTheme() {
     const savedTheme = localStorage.getItem('theme') || 'light';
     document.documentElement.setAttribute('data-theme', savedTheme);
     updateThemeUI(savedTheme);
+
+    // Enable transitions only after theme is applied
+    requestAnimationFrame(() => {
+        document.body.classList.add('theme-loaded');
+    });
 }
 
 function toggleTheme() {
@@ -20,16 +30,16 @@ function updateThemeUI(theme) {
     const moonIcon = document.getElementById('moonIcon');
     const themeText = document.getElementById('themeText');
 
-    if (!sunIcon || !moonIcon || !themeText) return;
+    if (!sunIcon || !moonIcon) return;
 
     if (theme === 'dark') {
         sunIcon.style.display = 'none';
         moonIcon.style.display = 'block';
-        themeText.textContent = 'Light';
+        if (themeText) themeText.textContent = 'Light';
     } else {
         sunIcon.style.display = 'block';
         moonIcon.style.display = 'none';
-        themeText.textContent = 'Dark';
+        if (themeText) themeText.textContent = 'Dark';
     }
 }
 
