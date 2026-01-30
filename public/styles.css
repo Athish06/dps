@@ -101,6 +101,152 @@ h1 {
     height: 18px;
 }
 
+/* Back Link */
+.back-link {
+    display: inline-block;
+    color: var(--accent-color);
+    text-decoration: none;
+    font-size: 14px;
+    margin-bottom: 8px;
+    transition: opacity 0.2s;
+}
+
+.back-link:hover {
+    opacity: 0.7;
+}
+
+/* Cipher Cards for Homepage */
+.cipher-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+    margin-top: 20px;
+}
+
+.cipher-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 32px;
+    text-decoration: none;
+    color: var(--text-primary);
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+    box-shadow: var(--shadow);
+}
+
+.cipher-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--accent-color);
+}
+
+.cipher-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+}
+
+.cipher-card h2 {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.cipher-card p {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+/* Input Row for RSA/Hill */
+.input-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.input-group {
+    flex: 1;
+    min-width: 140px;
+}
+
+.input-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+}
+
+.number-input,
+.text-input {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 16px;
+    font-family: 'SF Mono', Monaco, 'Courier New', monospace;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--input-bg);
+    color: var(--text-primary);
+    transition: border-color 0.2s;
+}
+
+.number-input:focus,
+.text-input:focus {
+    outline: none;
+    border-color: var(--accent-color);
+}
+
+.small-btn {
+    margin-top: 8px;
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--accent-color);
+    background: transparent;
+    border: 1px solid var(--accent-color);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.small-btn:hover {
+    background: var(--accent-color);
+    color: white;
+}
+
+/* Hill cipher dynamic matrix */
+.hill-matrix {
+    display: inline-grid;
+    gap: 6px;
+    padding: 16px;
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+.matrix-input {
+    width: 50px;
+    height: 40px;
+    text-align: center;
+    font-size: 14px;
+    font-family: 'SF Mono', Monaco, 'Courier New', monospace;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    background: var(--input-bg);
+    color: var(--text-primary);
+}
+
+.matrix-input:focus {
+    outline: none;
+    border-color: var(--accent-color);
+}
+
+.matrix-hint {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+}
+
 /* Sections */
 .input-section {
     background: var(--bg-card);

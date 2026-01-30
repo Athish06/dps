@@ -4,9 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description"
-        content="S-DES Encryption Tool - Simplified Data Encryption Standard visualization with step-by-step output">
-    <title>S-DES Encryption Tool</title>
+    <meta name="description" content="DPS - S-DES, RSA, and Hill Cipher with step-by-step calculations">
+    <title>DPS</title>
     <link rel="icon"
         href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔐</text></svg>">
     <link rel="stylesheet" href="styles.css">
@@ -16,7 +15,7 @@
     <div class="container">
         <header>
             <div>
-                <h1>S-DES Encryption</h1>
+                <h1>DPS</h1>
                 <p class="subtitle">By Athish, Aagash</p>
             </div>
             <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
@@ -34,84 +33,25 @@
             </button>
         </header>
 
-        <!-- Main Inputs -->
-        <div class="input-section">
-            <h2 class="section-title">Input Data</h2>
+        <div class="cipher-grid">
+            <a href="sdes.html" class="cipher-card">
+                <h2>S-DES</h2>
+                <p>Simplified Data Encryption Standard with detailed step-by-step encryption process</p>
+            </a>
 
-            <div class="array-container">
-                <label class="array-label">Plaintext (8 bits)</label>
-                <div class="array-boxes" id="plaintextBoxes"></div>
-            </div>
+            <a href="rsa.html" class="cipher-card">
+                <h2>RSA</h2>
+                <p>Asymmetric encryption with modular exponentiation and key generation</p>
+            </a>
 
-            <div class="array-container">
-                <label class="array-label">Key (10 bits)</label>
-                <div class="array-boxes" id="keyBoxes"></div>
-            </div>
-        </div>
-
-        <!-- Permutation Tables -->
-        <div class="input-section">
-            <h2 class="section-title">Permutation Tables</h2>
-
-            <div class="inline-arrays">
-                <div class="array-container">
-                    <label class="array-label">P10 (10 elements)</label>
-                    <div class="array-boxes" id="p10Boxes"></div>
-                </div>
-
-                <div class="array-container">
-                    <label class="array-label">P8 (8 elements)</label>
-                    <div class="array-boxes" id="p8Boxes"></div>
-                </div>
-            </div>
-
-            <div class="inline-arrays" style="margin-top: 20px;">
-                <div class="array-container">
-                    <label class="array-label">IP - Initial Permutation (8 elements)</label>
-                    <div class="array-boxes" id="ipBoxes"></div>
-                </div>
-
-                <div class="array-container">
-                    <label class="array-label">EP - Expansion (8 elements)</label>
-                    <div class="array-boxes" id="epBoxes"></div>
-                </div>
-            </div>
-
-            <div class="inline-arrays" style="margin-top: 20px;">
-                <div class="array-container">
-                    <label class="array-label">P4 (4 elements)</label>
-                    <div class="array-boxes" id="p4Boxes"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- S-Boxes -->
-        <div class="input-section">
-            <h2 class="section-title">S-Boxes (4x4 matrices with 2-bit values)</h2>
-
-            <div style="display: flex; flex-wrap: wrap; gap: 40px;">
-                <div class="matrix-container">
-                    <label class="matrix-label">S0 Box</label>
-                    <div class="matrix-grid" id="s0Grid"></div>
-                </div>
-
-                <div class="matrix-container">
-                    <label class="matrix-label">S1 Box</label>
-                    <div class="matrix-grid" id="s1Grid"></div>
-                </div>
-            </div>
-        </div>
-
-        <button class="encrypt-btn" id="encryptBtn">Encrypt</button>
-
-        <!-- Results -->
-        <div class="results-section" id="resultsSection">
-            <h2 class="section-title">Step-by-Step Encryption Process</h2>
-            <div id="resultsContent"></div>
+            <a href="hill.html" class="cipher-card">
+                <h2>Hill Cipher</h2>
+                <p>Matrix-based encryption with dynamic m×m key matrix</p>
+            </a>
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <script src="common.js"></script>
 </body>
 
 </html>

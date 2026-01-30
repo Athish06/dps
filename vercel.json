@@ -20,6 +20,10 @@
             "dest": "/api/rsa.py"
         },
         {
+            "src": "/api/hill",
+            "dest": "/api/hill.py"
+        },
+        {
             "src": "/(.*)",
             "dest": "/public/$1"
         }

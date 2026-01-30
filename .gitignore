@@ -1,0 +1,12 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Vercel
+.vercel
+.output
+
+# OS
+.DS_Store
+Thumbs.db
