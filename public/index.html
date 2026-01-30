@@ -35,48 +35,72 @@
 
         <!-- CO-1 Section -->
         <div class="cipher-category">
-            <h2 class="category-header">CO-1</h2>
-            <div class="cipher-grid">
-                <a href="sdes.html" class="cipher-card">
-                    <h2>S-DES</h2>
-                    <p>Simplified Data Encryption Standard with detailed step-by-step encryption process</p>
-                </a>
+            <div class="category-header-desktop">CO-1</div>
+            <button class="category-toggle-mobile" onclick="toggleCategory(this)">
+                <span class="category-title">CO-1</span>
+                <svg class="toggle-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+            </button>
+            <div class="category-content">
+                <div class="cipher-grid">
+                    <a href="sdes.html" class="cipher-card">
+                        <h2>S-DES</h2>
+                        <p>Simplified Data Encryption Standard with detailed step-by-step encryption process</p>
+                    </a>
 
-                <a href="hill.html" class="cipher-card">
-                    <h2>Hill Cipher</h2>
-                    <p>Matrix-based encryption with dynamic m×m key matrix</p>
-                </a>
+                    <a href="hill.html" class="cipher-card">
+                        <h2>Hill Cipher</h2>
+                        <p>Matrix-based encryption with dynamic m×m key matrix</p>
+                    </a>
 
-                <a href="playfair.html" class="cipher-card">
-                    <h2>Playfair Cipher</h2>
-                    <p>5×5 matrix cipher with three encryption rules (Same Row, Same Column, Rectangle)</p>
-                </a>
+                    <a href="playfair.html" class="cipher-card">
+                        <h2>Playfair Cipher</h2>
+                        <p>5×5 matrix cipher with three encryption rules (Same Row, Same Column, Rectangle)</p>
+                    </a>
 
-                <a href="monoalphabetic.html" class="cipher-card">
-                    <h2>Monoalphabetic Cipher</h2>
-                    <p>Additive, Multiplicative, and Affine modes with Extended Euclidean Algorithm</p>
-                </a>
+                    <a href="monoalphabetic.html" class="cipher-card">
+                        <h2>Monoalphabetic Cipher</h2>
+                        <p>Additive, Multiplicative, and Affine modes with Extended Euclidean Algorithm</p>
+                    </a>
 
-                <a href="adfgvx.html" class="cipher-card">
-                    <h2>ADFGVX Cipher</h2>
-                    <p>WWI cipher with Polybius square substitution and columnar transposition</p>
-                </a>
+                    <a href="adfgvx.html" class="cipher-card">
+                        <h2>ADFGVX Cipher</h2>
+                        <p>WWI cipher with Polybius square substitution and columnar transposition</p>
+                    </a>
+                </div>
             </div>
         </div>
 
         <!-- CO-2 Section -->
         <div class="cipher-category">
-            <h2 class="category-header">CO-2</h2>
-            <div class="cipher-grid">
-                <a href="rsa.html" class="cipher-card">
-                    <h2>RSA</h2>
-                    <p>Asymmetric encryption with modular exponentiation and key generation</p>
-                </a>
+            <div class="category-header-desktop">CO-2</div>
+            <button class="category-toggle-mobile" onclick="toggleCategory(this)">
+                <span class="category-title">CO-2</span>
+                <svg class="toggle-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+            </button>
+            <div class="category-content">
+                <div class="cipher-grid">
+                    <a href="rsa.html" class="cipher-card">
+                        <h2>RSA</h2>
+                        <p>Asymmetric encryption with modular exponentiation and key generation</p>
+                    </a>
+                </div>
             </div>
         </div>
     </div>
 
     <script src="common.js"></script>
+    <script>
+        function toggleCategory(button) {
+            const category = button.closest('.cipher-category');
+            category.classList.toggle('open');
+        }
+    </script>
 </body>
 
 </html>

@@ -615,18 +615,38 @@ h1 {
         padding: 20px 16px;
     }
 
+    /* Header - DPS and toggle on same line */
+    header {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 16px;
+        padding-bottom: 12px;
+        gap: 10px;
+    }
+
+    header>div {
+        flex: 1;
+    }
+
     h1 {
-        font-size: 22px;
+        font-size: 24px;
+        margin-bottom: 2px;
     }
 
     .subtitle {
-        font-size: 13px;
+        font-size: 12px;
+        margin-top: 2px;
     }
 
-    /* Icon-only theme toggle on mobile */
+    /* Icon-only theme toggle on mobile - aligned with title */
     .theme-toggle {
-        padding: 10px;
+        padding: 8px;
         gap: 0;
+        flex-shrink: 0;
+        align-self: flex-start;
+        margin-top: 0;
     }
 
     .theme-toggle #themeText {
@@ -713,34 +733,29 @@ h1 {
         font-size: 12px;
     }
 
-    header {
-        margin-bottom: 24px;
-        padding-bottom: 16px;
-        flex-wrap: nowrap;
-        gap: 12px;
-    }
-
-    header>div {
-        flex: 1;
-        min-width: 0;
-    }
-
-    .theme-toggle {
-        flex-shrink: 0;
-        margin-left: auto;
-    }
-
     .back-link {
         font-size: 13px;
     }
+
+    /* Reduce category spacing */
+    .cipher-category {
+        margin-bottom: 20px;
+    }
+
+    .category-header {
+        font-size: 13px;
+        margin-bottom: 12px;
+        padding-bottom: 6px;
+    }
 }
 
-/* Category Section Styles for CO-1/CO-2 */
+/* Category Section Styles - Desktop: Static, Mobile: Toggle */
 .cipher-category {
     margin-bottom: 32px;
 }
 
-.category-header {
+/* Desktop header - visible on desktop */
+.category-header-desktop {
     font-size: 16px;
     font-weight: 600;
     color: var(--text-secondary);
@@ -751,13 +766,83 @@ h1 {
     letter-spacing: 1px;
 }
 
+/* Mobile toggle - hidden on desktop */
+.category-toggle-mobile {
+    display: none;
+}
+
+/* Content always visible on desktop */
+.category-content {
+    max-height: none;
+    opacity: 1;
+    overflow: visible;
+}
+
+.toggle-icon {
+    width: 16px;
+    height: 16px;
+    color: var(--text-secondary);
+    transition: transform 0.3s ease;
+}
+
+/* Mobile: Show toggle, hide desktop header */
 @media (max-width: 480px) {
-    .category-header {
-        font-size: 14px;
-        margin-bottom: 12px;
+    .cipher-category {
+        margin-bottom: 20px;
     }
 
-    .cipher-category {
-        margin-bottom: 24px;
+    /* Hide desktop header on mobile */
+    .category-header-desktop {
+        display: none;
+    }
+
+    /* Show mobile toggle */
+    .category-toggle-mobile {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        padding: 0 0 10px 0;
+        background: transparent;
+        border: none;
+        border-bottom: 1px solid var(--border-color);
+        cursor: pointer;
+        transition: opacity 0.2s;
+    }
+
+    .category-toggle-mobile:hover {
+        opacity: 0.7;
+    }
+
+    .category-toggle-mobile:active {
+        opacity: 0.5;
+    }
+
+    .category-title {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+    }
+
+    /* Content hidden by default on mobile */
+    .category-content {
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        transition: max-height 0.4s ease, opacity 0.3s ease, margin-top 0.3s ease;
+        margin-top: 0;
+    }
+
+    /* Open state on mobile */
+    .cipher-category.open .toggle-icon {
+        transform: rotate(180deg);
+    }
+
+    .cipher-category.open .category-content {
+        max-height: 2000px;
+        opacity: 1;
+        margin-top: 14px;
     }
 }
