@@ -52,6 +52,10 @@
             "dest": "/api/euler.py"
         },
         {
+            "src": "/api/fermat",
+            "dest": "/api/fermat.py"
+        },
+        {
             "src": "/(.*)",
             "dest": "/public/$1"
         }

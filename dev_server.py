@@ -745,6 +745,16 @@ class DevHandler(http.server.SimpleHTTPRequestHandler):
                 modulus = int(data.get('modulus', 13))
                 result = euler_module.euler_theorem_detailed(base, exponent, modulus)
             
+            elif self.path == '/api/fermat':
+                import importlib.util
+                spec = importlib.util.spec_from_file_location("fermat", os.path.join(os.path.dirname(__file__), 'api', 'fermat.py'))
+                fermat_module = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(fermat_module)
+                base = int(data.get('base', 3))
+                exponent = int(data.get('exponent', 100))
+                modulus = int(data.get('modulus', 7))
+                result = fermat_module.fermat_theorem_detailed(base, exponent, modulus)
+            
             else:
                 self.send_response(404)
                 self.end_headers()
