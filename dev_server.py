@@ -254,33 +254,133 @@ def mod_exp_detailed(base, exp, mod):
     return result, '\n'.join(steps)
 
 def extended_euclidean_detailed(e, phi):
-    steps = []
-    steps.append(f"Finding d such that: e × d ≡ 1 (mod φ(n))")
-    steps.append(f"Where e = {e} and φ(n) = {phi}")
-    steps.append("")
-    a, b = e, phi
-    quotients = []
-    steps.append("Step 1: Apply Euclidean Algorithm")
-    while b != 0:
-        q = a // b
-        r = a % b
-        steps.append(f"  {a} = {b} × {q} + {r}")
-        quotients.append(q)
-        a, b = b, r
-    steps.append(f"  gcd({e}, {phi}) = {a}")
-    steps.append("")
-    if a != 1:
-        return None, '\n'.join(steps)
-    steps.append("Step 2: Back substitution to find d")
-    x, y = 1, 0
-    for i in range(len(quotients) - 1, -1, -1):
-        x, y = y, x - quotients[i] * y
-    d = x % phi
-    steps.append(f"  d = {x} mod {phi} = {d}")
-    steps.append("")
-    steps.append(f"Verification: {e} × {d} mod {phi} = {(e * d) % phi}")
-    steps.append(f"Private key d = {d}")
-    return d, '\n'.join(steps)
+    """Extended Euclidean Algorithm with simple dividers for RSA"""
+    lines = []
+    
+    # Header
+    lines.append("═" * 55)
+    lines.append("EXTENDED EUCLIDEAN ALGORITHM")
+    lines.append(f"Finding d such that e × d ≡ 1 (mod φ(n))")
+    lines.append(f"Where e = {e} and φ(n) = {phi}")
+    lines.append("═" * 55)
+    lines.append("")
+    
+    # Formulas
+    lines.append("FORMULAS:")
+    lines.append("─" * 40)
+    lines.append("Recurrence Relations:")
+    lines.append("  q = r1 ÷ r2  (integer division)")
+    lines.append("  r = r1 - q × r2  (remainder)")
+    lines.append("  s = s1 - q × s2")
+    lines.append("  t = t1 - q × t2")
+    lines.append("")
+    lines.append("Init: s1=1, s2=0, t1=0, t2=1")
+    lines.append("─" * 40)
+    lines.append("")
+    
+    # Initialize values
+    r1, r2 = phi, e
+    s1, s2 = 1, 0
+    t1, t2 = 0, 1
+    
+    # Computation table
+    lines.append("COMPUTATION TABLE:")
+    lines.append("─" * 45)
+    lines.append("  q  │  r1  │  r2  │  r  │  s  │  t")
+    lines.append("─────┼──────┼──────┼─────┼─────┼─────")
+    lines.append(f"  -  │ {r1:>4} │ {r2:>4} │  -  │  -  │  -   ← Init")
+    
+    step = 1
+    calculation_steps = []
+    
+    while r2 > 0:
+        q = r1 // r2
+        r = r1 % r2
+        s = s1 - (q * s2)
+        t = t1 - (q * t2)
+        
+        calc_detail = {
+            'step': step, 'q': q, 'r1': r1, 'r2': r2, 'r': r,
+            's1': s1, 's2': s2, 's': s, 't1': t1, 't2': t2, 't': t
+        }
+        calculation_steps.append(calc_detail)
+        
+        lines.append(f" {q:>2}  │ {r1:>4} │ {r2:>4} │ {r:>3} │ {s:>3} │ {t:>3}   Step {step}")
+        
+        r1, r2 = r2, r
+        s1, s2 = s2, s
+        t1, t2 = t2, t
+        step += 1
+    
+    lines.append("─" * 45)
+    lines.append(f"GCD({e}, {phi}) = {r1}")
+    lines.append("")
+    
+    # Step-by-step calculations with simple dividers
+    lines.append("DETAILED CALCULATIONS:")
+    lines.append("═" * 55)
+    
+    for calc in calculation_steps:
+        lines.append("")
+        lines.append(f"STEP {calc['step']}")
+        lines.append("─" * 55)
+        lines.append(f"Given: r1={calc['r1']}, r2={calc['r2']}, s1={calc['s1']}, s2={calc['s2']}, t1={calc['t1']}, t2={calc['t2']}")
+        lines.append("")
+        lines.append("Calculate q (quotient):")
+        lines.append(f"  q = r1 ÷ r2 = {calc['r1']} ÷ {calc['r2']} = {calc['q']}")
+        lines.append("")
+        lines.append("Calculate r (remainder):")
+        lines.append(f"  r = r1 - q × r2")
+        lines.append(f"  r = {calc['r1']} - {calc['q']} × {calc['r2']}")
+        lines.append(f"  r = {calc['r1']} - {calc['q'] * calc['r2']} = {calc['r']}")
+        lines.append("")
+        lines.append("Calculate s:")
+        lines.append(f"  s = s1 - q × s2")
+        lines.append(f"  s = {calc['s1']} - {calc['q']} × {calc['s2']}")
+        lines.append(f"  s = {calc['s1']} - ({calc['q'] * calc['s2']}) = {calc['s']}")
+        lines.append("")
+        lines.append("Calculate t:")
+        lines.append(f"  t = t1 - q × t2")
+        lines.append(f"  t = {calc['t1']} - {calc['q']} × {calc['t2']}")
+        lines.append(f"  t = {calc['t1']} - ({calc['q'] * calc['t2']}) = {calc['t']}")
+        lines.append("")
+        lines.append("Update for next step:")
+        lines.append(f"  r1 ← r2 = {calc['r2']},  r2 ← r = {calc['r']}")
+        lines.append(f"  s1 ← s2 = {calc['s2']},  s2 ← s = {calc['s']}")
+        lines.append(f"  t1 ← t2 = {calc['t2']},  t2 ← t = {calc['t']}")
+        lines.append("─" * 55)
+    
+    lines.append("")
+    
+    if r1 != 1:
+        lines.append("═" * 55)
+        lines.append("RESULT: NO INVERSE EXISTS")
+        lines.append(f"GCD({e}, {phi}) = {r1} ≠ 1")
+        lines.append("═" * 55)
+        return None, '\n'.join(lines)
+    
+    d = t1
+    if d < 0:
+        lines.append("ADJUSTMENT:")
+        lines.append("─" * 40)
+        lines.append(f"Coefficient t = {d} is negative")
+        lines.append(f"Adjusting: {d} + {phi} = {d + phi}")
+        lines.append("─" * 40)
+        lines.append("")
+        d = d + phi
+    
+    lines.append("═" * 55)
+    lines.append("RESULT")
+    lines.append("═" * 55)
+    lines.append(f"GCD({e}, {phi}) = 1 ✓")
+    lines.append("")
+    lines.append(f"★ Private key d = {d}")
+    lines.append("")
+    lines.append("Verification:")
+    lines.append(f"  {e} × {d} mod {phi} = {(e * d) % phi} ✓")
+    lines.append("═" * 55)
+    
+    return d, '\n'.join(lines)
 
 def rsa_encrypt_detailed(p, q, e, m):
     all_sections = []
