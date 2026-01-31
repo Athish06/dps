@@ -37,45 +37,29 @@ def brute_force_inverse_detailed(a, m):
     return None, '\n'.join(lines)
 
 def extended_euclidean_detailed(a, m):
-    """Extended Euclidean Algorithm with properly formatted fixed-width boxes"""
+    """Extended Euclidean Algorithm with simple dividers"""
     lines = []
-    box_width = 55
-    
-    def box_line(text=""):
-        """Create a line inside a box with proper padding"""
-        padded = f"│ {text}".ljust(box_width - 1) + "│"
-        return padded
-    
-    def box_top():
-        return "┌" + "─" * (box_width - 2) + "┐"
-    
-    def box_bottom():
-        return "└" + "─" * (box_width - 2) + "┘"
-    
-    def box_divider():
-        return "├" + "─" * (box_width - 2) + "┤"
     
     # Header
-    lines.append("═" * box_width)
+    lines.append("═" * 55)
     lines.append("EXTENDED EUCLIDEAN ALGORITHM")
     lines.append(f"Finding inverse of {a} mod {m}")
-    lines.append("═" * box_width)
+    lines.append("═" * 55)
     lines.append("")
     
-    # Formulas box
-    lines.append(box_top())
-    lines.append(box_line("FORMULAS"))
-    lines.append(box_divider())
-    lines.append(box_line(f"Goal: {a} × d ≡ 1 (mod {m})"))
-    lines.append(box_line(""))
-    lines.append(box_line("Recurrence Relations:"))
-    lines.append(box_line("  q = r1 ÷ r2  (integer division)"))
-    lines.append(box_line("  r = r1 - q × r2  (remainder)"))
-    lines.append(box_line("  s = s1 - q × s2"))
-    lines.append(box_line("  t = t1 - q × t2"))
-    lines.append(box_line(""))
-    lines.append(box_line("Init: s1=1, s2=0, t1=0, t2=1"))
-    lines.append(box_bottom())
+    # Formulas
+    lines.append("FORMULAS:")
+    lines.append("─" * 40)
+    lines.append(f"Goal: {a} × d ≡ 1 (mod {m})")
+    lines.append("")
+    lines.append("Recurrence Relations:")
+    lines.append("  q = r1 ÷ r2  (integer division)")
+    lines.append("  r = r1 - q × r2  (remainder)")
+    lines.append("  s = s1 - q × s2")
+    lines.append("  t = t1 - q × t2")
+    lines.append("")
+    lines.append("Init: s1=1, s2=0, t1=0, t2=1")
+    lines.append("─" * 40)
     lines.append("")
     
     # Initialize values
@@ -84,12 +68,11 @@ def extended_euclidean_detailed(a, m):
     t1, t2 = 0, 1
     
     # Computation table
-    lines.append(box_top())
-    lines.append(box_line("COMPUTATION TABLE"))
-    lines.append(box_divider())
-    lines.append(box_line("  q  │  r1  │  r2  │  r  │  s  │  t"))
-    lines.append(box_line("─────┼──────┼──────┼─────┼─────┼─────"))
-    lines.append(box_line(f"  -  │ {r1:>4} │ {r2:>4} │  -  │  -  │  -   ← Init"))
+    lines.append("COMPUTATION TABLE:")
+    lines.append("─" * 45)
+    lines.append("  q  │  r1  │  r2  │  r  │  s  │  t")
+    lines.append("─────┼──────┼──────┼─────┼─────┼─────")
+    lines.append(f"  -  │ {r1:>4} │ {r2:>4} │  -  │  -  │  -   ← Init")
     
     step = 1
     calculation_steps = []
@@ -106,81 +89,82 @@ def extended_euclidean_detailed(a, m):
         }
         calculation_steps.append(calc_detail)
         
-        lines.append(box_line(f" {q:>2}  │ {r1:>4} │ {r2:>4} │ {r:>3} │ {s:>3} │ {t:>3}   Step {step}"))
+        lines.append(f" {q:>2}  │ {r1:>4} │ {r2:>4} │ {r:>3} │ {s:>3} │ {t:>3}   Step {step}")
         
         r1, r2 = r2, r
         s1, s2 = s2, s
         t1, t2 = t2, t
         step += 1
     
-    lines.append(box_divider())
-    lines.append(box_line(f"GCD({a}, {m}) = {r1}"))
-    lines.append(box_bottom())
+    lines.append("─" * 45)
+    lines.append(f"GCD({a}, {m}) = {r1}")
     lines.append("")
     
-    # Step-by-step calculation boxes
+    # Step-by-step calculations with simple dividers
+    lines.append("DETAILED CALCULATIONS:")
+    lines.append("═" * 55)
+    
     for calc in calculation_steps:
-        lines.append(box_top())
-        lines.append(box_line(f"STEP {calc['step']}"))
-        lines.append(box_divider())
-        lines.append(box_line(f"Given: r1={calc['r1']}, r2={calc['r2']}, s1={calc['s1']}, s2={calc['s2']}, t1={calc['t1']}, t2={calc['t2']}"))
-        lines.append(box_line(""))
-        lines.append(box_line("Calculate q (quotient):"))
-        lines.append(box_line(f"  q = r1 ÷ r2 = {calc['r1']} ÷ {calc['r2']} = {calc['q']}"))
-        lines.append(box_line(""))
-        lines.append(box_line("Calculate r (remainder):"))
-        lines.append(box_line(f"  r = r1 - q × r2"))
-        lines.append(box_line(f"  r = {calc['r1']} - {calc['q']} × {calc['r2']}"))
-        lines.append(box_line(f"  r = {calc['r1']} - {calc['q'] * calc['r2']} = {calc['r']}"))
-        lines.append(box_line(""))
-        lines.append(box_line("Calculate s:"))
-        lines.append(box_line(f"  s = s1 - q × s2"))
-        lines.append(box_line(f"  s = {calc['s1']} - {calc['q']} × {calc['s2']}"))
-        lines.append(box_line(f"  s = {calc['s1']} - ({calc['q'] * calc['s2']}) = {calc['s']}"))
-        lines.append(box_line(""))
-        lines.append(box_line("Calculate t:"))
-        lines.append(box_line(f"  t = t1 - q × t2"))
-        lines.append(box_line(f"  t = {calc['t1']} - {calc['q']} × {calc['t2']}"))
-        lines.append(box_line(f"  t = {calc['t1']} - ({calc['q'] * calc['t2']}) = {calc['t']}"))
-        lines.append(box_line(""))
-        lines.append(box_line("Update for next step:"))
-        lines.append(box_line(f"  r1 ← r2 = {calc['r2']},  r2 ← r = {calc['r']}"))
-        lines.append(box_line(f"  s1 ← s2 = {calc['s2']},  s2 ← s = {calc['s']}"))
-        lines.append(box_line(f"  t1 ← t2 = {calc['t2']},  t2 ← t = {calc['t']}"))
-        lines.append(box_bottom())
         lines.append("")
+        lines.append(f"STEP {calc['step']}")
+        lines.append("─" * 55)
+        lines.append(f"Given: r1={calc['r1']}, r2={calc['r2']}, s1={calc['s1']}, s2={calc['s2']}, t1={calc['t1']}, t2={calc['t2']}")
+        lines.append("")
+        lines.append("Calculate q (quotient):")
+        lines.append(f"  q = r1 ÷ r2 = {calc['r1']} ÷ {calc['r2']} = {calc['q']}")
+        lines.append("")
+        lines.append("Calculate r (remainder):")
+        lines.append(f"  r = r1 - q × r2")
+        lines.append(f"  r = {calc['r1']} - {calc['q']} × {calc['r2']}")
+        lines.append(f"  r = {calc['r1']} - {calc['q'] * calc['r2']} = {calc['r']}")
+        lines.append("")
+        lines.append("Calculate s:")
+        lines.append(f"  s = s1 - q × s2")
+        lines.append(f"  s = {calc['s1']} - {calc['q']} × {calc['s2']}")
+        lines.append(f"  s = {calc['s1']} - ({calc['q'] * calc['s2']}) = {calc['s']}")
+        lines.append("")
+        lines.append("Calculate t:")
+        lines.append(f"  t = t1 - q × t2")
+        lines.append(f"  t = {calc['t1']} - {calc['q']} × {calc['t2']}")
+        lines.append(f"  t = {calc['t1']} - ({calc['q'] * calc['t2']}) = {calc['t']}")
+        lines.append("")
+        lines.append("Update for next step:")
+        lines.append(f"  r1 ← r2 = {calc['r2']},  r2 ← r = {calc['r']}")
+        lines.append(f"  s1 ← s2 = {calc['s2']},  s2 ← s = {calc['s']}")
+        lines.append(f"  t1 ← t2 = {calc['t2']},  t2 ← t = {calc['t']}")
+        lines.append("─" * 55)
+    
+    lines.append("")
     
     if r1 != 1:
-        lines.append(box_top())
-        lines.append(box_line("RESULT: NO INVERSE EXISTS"))
-        lines.append(box_divider())
-        lines.append(box_line(f"GCD({a}, {m}) = {r1} ≠ 1"))
-        lines.append(box_line(f"{a} and {m} are NOT coprime!"))
-        lines.append(box_bottom())
+        lines.append("═" * 55)
+        lines.append("RESULT: NO INVERSE EXISTS")
+        lines.append(f"GCD({a}, {m}) = {r1} ≠ 1")
+        lines.append(f"{a} and {m} are NOT coprime!")
+        lines.append("═" * 55)
         return None, '\n'.join(lines)
     
     inverse = s1
     if inverse < 0:
-        lines.append(box_top())
-        lines.append(box_line("ADJUSTMENT"))
-        lines.append(box_divider())
-        lines.append(box_line(f"Coefficient s = {inverse} is negative"))
-        lines.append(box_line(f"Adjusting: {inverse} + {m} = {inverse + m}"))
-        lines.append(box_bottom())
+        lines.append("ADJUSTMENT:")
+        lines.append("─" * 40)
+        lines.append(f"Coefficient s = {inverse} is negative")
+        lines.append(f"Adjusting: {inverse} + {m} = {inverse + m}")
+        lines.append("─" * 40)
         lines.append("")
         inverse = inverse + m
     
-    lines.append(box_top())
-    lines.append(box_line("RESULT"))
-    lines.append(box_divider())
-    lines.append(box_line(f"GCD({a}, {m}) = 1 ✓"))
-    lines.append(box_line(""))
-    lines.append(box_line(f"★ Inverse of {a} mod {m} = {inverse}"))
-    lines.append(box_line(""))
-    lines.append(box_line("Verification:"))
-    lines.append(box_line(f"  {a} × {inverse} = {a * inverse}"))
-    lines.append(box_line(f"  {a * inverse} mod {m} = {(a * inverse) % m} ✓"))
-    lines.append(box_bottom())
+    lines.append("═" * 55)
+    lines.append("RESULT")
+    lines.append("═" * 55)
+    lines.append(f"GCD({a}, {m}) = 1 ✓")
+    lines.append("")
+    lines.append(f"★ Inverse of {a} mod {m} = {inverse}")
+    lines.append("")
+    lines.append("Verification:")
+    lines.append(f"  {a} × {inverse} = {a * inverse}")
+    lines.append(f"  {a * inverse} mod {m} = {(a * inverse) % m} ✓")
+    lines.append("═" * 55)
     
     return inverse, '\n'.join(lines)
 
