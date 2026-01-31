@@ -48,6 +48,10 @@
             "dest": "/api/gcd.py"
         },
         {
+            "src": "/api/euler",
+            "dest": "/api/euler.py"
+        },
+        {
             "src": "/(.*)",
             "dest": "/public/$1"
         }

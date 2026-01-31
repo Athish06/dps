@@ -735,6 +735,16 @@ class DevHandler(http.server.SimpleHTTPRequestHandler):
                 b = int(data.get('b', 18))
                 result = gcd_module.gcd_detailed(a, b)
             
+            elif self.path == '/api/euler':
+                import importlib.util
+                spec = importlib.util.spec_from_file_location("euler", os.path.join(os.path.dirname(__file__), 'api', 'euler.py'))
+                euler_module = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(euler_module)
+                base = int(data.get('base', 7))
+                exponent = int(data.get('exponent', 256))
+                modulus = int(data.get('modulus', 13))
+                result = euler_module.euler_theorem_detailed(base, exponent, modulus)
+            
             else:
                 self.send_response(404)
                 self.end_headers()
