@@ -706,6 +706,35 @@ class DevHandler(http.server.SimpleHTTPRequestHandler):
                 trans_key = data.get('trans_key', 'cipher')
                 result = adfgvx_cipher_detailed(plaintext, grid_key, trans_key)
             
+            elif self.path == '/api/extended-euclidean':
+                # Import from the api module
+                import importlib.util
+                spec = importlib.util.spec_from_file_location("extended_euclidean", os.path.join(os.path.dirname(__file__), 'api', 'extended-euclidean.py'))
+                ee_module = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(ee_module)
+                a = int(data.get('a', 5))
+                m = int(data.get('m', 192))
+                result = ee_module.extended_euclidean_detailed(a, m)
+            
+            elif self.path == '/api/mod-exp':
+                import importlib.util
+                spec = importlib.util.spec_from_file_location("mod_exp", os.path.join(os.path.dirname(__file__), 'api', 'mod-exp.py'))
+                me_module = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(me_module)
+                a = int(data.get('a', 7))
+                n = int(data.get('n', 256))
+                m = int(data.get('m', 13))
+                result = me_module.mod_exp_detailed(a, n, m)
+            
+            elif self.path == '/api/gcd':
+                import importlib.util
+                spec = importlib.util.spec_from_file_location("gcd", os.path.join(os.path.dirname(__file__), 'api', 'gcd.py'))
+                gcd_module = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(gcd_module)
+                a = int(data.get('a', 48))
+                b = int(data.get('b', 18))
+                result = gcd_module.gcd_detailed(a, b)
+            
             else:
                 self.send_response(404)
                 self.end_headers()
