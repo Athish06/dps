@@ -140,7 +140,12 @@ S=18  T=19  U=20  V=21  W=22  X=23  Y=24  Z=25"""
     
     # Section 4: Encryption - Matrix Multiplication
     enc_lines = []
-    enc_lines.append("Encryption Formula: C = K × P (mod 26)")
+    enc_lines.append("Encryption Formula: cᵢ = Σ(kⱼᵢ × pⱼ) mod 26")
+    enc_lines.append("")
+    enc_lines.append("For each cipher element cᵢ, we use COLUMN i of the key matrix:")
+    enc_lines.append("  c₁ = (k₁₁×p₁ + k₂₁×p₂ + k₃₁×p₃) mod 26")
+    enc_lines.append("  c₂ = (k₁₂×p₁ + k₂₂×p₂ + k₃₂×p₃) mod 26")
+    enc_lines.append("  etc.")
     enc_lines.append("")
     
     # Process in blocks of m characters
@@ -153,19 +158,24 @@ S=18  T=19  U=20  V=21  W=22  X=23  Y=24  Z=25"""
         
         enc_lines.append(f"Block {block + 1}: P = [{', '.join(map(str, P_block))}]")
         enc_lines.append("")
-        enc_lines.append("Matrix Multiplication:")
+        enc_lines.append("Matrix Multiplication (using columns of K):")
+        enc_lines.append("")
         
         C_block = []
         for i in range(m):
-            row = key_matrix[i]
-            products = [f"{row[j]}×{P_block[j]}" for j in range(m)]
-            total = sum(row[j] * P_block[j] for j in range(m))
+            # Use COLUMN i of key matrix: key_matrix[j][i] for j=0,1,...,m-1
+            col_values = [key_matrix[j][i] for j in range(m)]
+            products = [f"k{j+1}{i+1}×p{j+1}" for j in range(m)]
+            products_with_values = [f"{key_matrix[j][i]}×{P_block[j]}" for j in range(m)]
+            total = sum(key_matrix[j][i] * P_block[j] for j in range(m))
             result = total % 26
             C_block.append(result)
-            enc_lines.append(f"  Row {i+1}: ({' + '.join(products)}) = {total} mod 26 = {result}")
+            enc_lines.append(f"  c{i+1} = ({' + '.join(products)})")
+            enc_lines.append(f"     = ({' + '.join(products_with_values)})")
+            enc_lines.append(f"     = {total} mod 26 = {result}")
+            enc_lines.append("")
         
         cipher_nums.extend(C_block)
-        enc_lines.append("")
         enc_lines.append(f"Block {block + 1} Cipher: [{', '.join(map(str, C_block))}]")
         enc_lines.append("")
     
@@ -233,12 +243,96 @@ S=18  T=19  U=20  V=21  W=22  X=23  Y=24  Z=25"""
         K_inv = matrix_mod([[det_inv * adj[i][j] for j in range(m)] for i in range(m)])
         
         kinv_lines = []
-        kinv_lines.append("K⁻¹ = det⁻¹ × adj(K) mod 26")
+        kinv_lines.append("Formula: [K⁻¹]ᵢⱼ = det⁻¹ × (-1)^(i+j) × Dⱼᵢ mod 26")
+        kinv_lines.append("")
+        kinv_lines.append("Where Dⱼᵢ is the minor (subdeterminant) formed by")
+        kinv_lines.append("deleting row j and column i from K.")
+        kinv_lines.append("")
+        kinv_lines.append("─" * 50)
+        kinv_lines.append("STEP 1: Calculate Cofactor Matrix C")
+        kinv_lines.append("─" * 50)
+        kinv_lines.append("")
+        kinv_lines.append("Cᵢⱼ = (-1)^(i+j) × Mᵢⱼ")
+        kinv_lines.append("where Mᵢⱼ is the minor (delete row i, col j)")
+        kinv_lines.append("")
+        
+        # Show cofactor calculation for each element
+        cofactor_matrix = [[0] * m for _ in range(m)]
+        for i in range(m):
+            for j in range(m):
+                # Get minor
+                minor = []
+                for mi in range(m):
+                    if mi == i:
+                        continue
+                    row = []
+                    for mj in range(m):
+                        if mj != j:
+                            row.append(key_matrix[mi][mj])
+                    minor.append(row)
+                
+                kinv_lines.append(f"─ M[{i+1},{j+1}] (delete row {i+1}, col {j+1}) ─")
+                kinv_lines.append("")
+                # Display the minor matrix
+                for row in minor:
+                    kinv_lines.append("  [ " + "  ".join(f"{x:3}" for x in row) + " ]")
+                kinv_lines.append("")
+                
+                # Calculate minor determinant
+                if len(minor) == 1:
+                    minor_det = minor[0][0]
+                    kinv_lines.append(f"  det(M[{i+1},{j+1}]) = {minor_det}")
+                elif len(minor) == 2:
+                    a, b = minor[0][0], minor[0][1]
+                    c, d = minor[1][0], minor[1][1]
+                    minor_det = a * d - b * c
+                    kinv_lines.append(f"  det(M[{i+1},{j+1}]) = ({a}×{d}) - ({b}×{c})")
+                    kinv_lines.append(f"                = {a*d} - {b*c} = {minor_det}")
+                else:
+                    minor_det = determinant(minor)
+                    kinv_lines.append(f"  det(M[{i+1},{j+1}]) = {minor_det}")
+                
+                sign = ((-1) ** (i + j))
+                cofactor = sign * minor_det
+                cofactor_matrix[i][j] = cofactor
+                
+                sign_str = "+" if sign == 1 else "-"
+                kinv_lines.append("")
+                kinv_lines.append(f"  C[{i+1},{j+1}] = (-1)^({i+1}+{j+1}) × det(M[{i+1},{j+1}])")
+                kinv_lines.append(f"        = ({sign_str}1) × {minor_det} = {cofactor}")
+                kinv_lines.append("")
+        
+        kinv_lines.append("")
+        kinv_lines.append("Cofactor Matrix C:")
+        kinv_lines.append(format_matrix(cofactor_matrix, "  "))
+        kinv_lines.append("")
+        
+        kinv_lines.append("─" * 50)
+        kinv_lines.append("STEP 2: Adjugate = Transpose of Cofactor Matrix")
+        kinv_lines.append("─" * 50)
+        kinv_lines.append("")
+        kinv_lines.append("adj(K) = Cᵀ (transpose of cofactor matrix)")
         kinv_lines.append("")
         kinv_lines.append("Adjugate Matrix adj(K):")
         kinv_lines.append(format_matrix(adj, "  "))
         kinv_lines.append("")
-        kinv_lines.append(f"Multiply by det⁻¹ = {det_inv} and apply mod 26:")
+        
+        kinv_lines.append("─" * 50)
+        kinv_lines.append("STEP 3: Multiply by det⁻¹ and apply mod 26")
+        kinv_lines.append("─" * 50)
+        kinv_lines.append("")
+        kinv_lines.append(f"K⁻¹ = det⁻¹ × adj(K) mod 26")
+        kinv_lines.append(f"K⁻¹ = {det_inv} × adj(K) mod 26")
+        kinv_lines.append("")
+        
+        for i in range(m):
+            for j in range(m):
+                raw_val = det_inv * adj[i][j]
+                mod_val = raw_val % 26
+                if mod_val < 0:
+                    mod_val += 26
+                kinv_lines.append(f"K⁻¹[{i+1},{j+1}] = {det_inv} × {adj[i][j]} = {raw_val} mod 26 = {K_inv[i][j]}")
+        
         kinv_lines.append("")
         kinv_lines.append("Inverse Key Matrix K⁻¹:")
         kinv_lines.append(format_matrix(K_inv, "  "))
@@ -260,17 +354,21 @@ S=18  T=19  U=20  V=21  W=22  X=23  Y=24  Z=25"""
             
             dec_lines.append(f"Block {block + 1}: C = [{', '.join(map(str, C_block))}]")
             dec_lines.append("")
+            dec_lines.append("Matrix Multiplication (using columns of K⁻¹):")
+            dec_lines.append("")
             
             P_block = []
             for i in range(m):
-                row = K_inv[i]
-                total = sum(row[j] * C_block[j] for j in range(m))
+                # Use COLUMN i of K_inv
+                products = [f"{K_inv[j][i]}×{C_block[j]}" for j in range(m)]
+                total = sum(K_inv[j][i] * C_block[j] for j in range(m))
                 result = total % 26
                 P_block.append(result)
-                dec_lines.append(f"  Row {i+1}: result = {total} mod 26 = {result}")
+                dec_lines.append(f"  p{i+1} = ({' + '.join(products)})")
+                dec_lines.append(f"     = {total} mod 26 = {result}")
+                dec_lines.append("")
             
             decrypted_nums.extend(P_block)
-            dec_lines.append("")
             dec_lines.append(f"Block {block + 1} Decrypted: [{', '.join(map(str, P_block))}]")
             dec_lines.append("")
         

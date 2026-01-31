@@ -495,22 +495,27 @@ def hill_cipher_detailed(plaintext, key_matrix, m):
     conv_lines.append(f"\nPlaintext Vector P = [{', '.join(map(str, plaintext_nums))}]")
     all_sections.append({"section": "Convert Plaintext to Numbers", "subsections": [{"title": "Character to Number", "content": '\n'.join(conv_lines)}]})
     
-    enc_lines = ["Encryption: C = K × P (mod 26)", ""]
+    enc_lines = ["Encryption Formula: cᵢ = Σ(kⱼᵢ × pⱼ) mod 26", ""]
+    enc_lines.append("For cᵢ, use COLUMN i of key matrix")
+    enc_lines.append("")
     cipher_nums = []
     block_count = len(plaintext) // m
     for block in range(block_count):
         block_start = block * m
         P_block = plaintext_nums[block_start:block_start + m]
-        enc_lines.append(f"Block {block + 1}: [{', '.join(map(str, P_block))}]")
+        enc_lines.append(f"Block {block + 1}: P = [{', '.join(map(str, P_block))}]")
+        enc_lines.append("")
         C_block = []
         for i in range(m):
-            row = key_matrix[i]
-            total = sum(row[j] * P_block[j] for j in range(m))
+            # Use COLUMN i of key matrix
+            products = [f"{key_matrix[j][i]}×{P_block[j]}" for j in range(m)]
+            total = sum(key_matrix[j][i] * P_block[j] for j in range(m))
             result = total % 26
             C_block.append(result)
-            enc_lines.append(f"  Row {i+1}: {total} mod 26 = {result}")
+            enc_lines.append(f"  c{i+1} = ({' + '.join(products)}) = {total} mod 26 = {result}")
         cipher_nums.extend(C_block)
-        enc_lines.append(f"  Result: [{', '.join(map(str, C_block))}]\n")
+        enc_lines.append(f"  Cipher: [{', '.join(map(str, C_block))}]")
+        enc_lines.append("")
     all_sections.append({"section": "Encryption", "subsections": [{"title": "Matrix Multiplication", "content": '\n'.join(enc_lines)}]})
     
     ciphertext = ''.join(num_to_char(n) for n in cipher_nums)
@@ -528,18 +533,99 @@ def hill_cipher_detailed(plaintext, key_matrix, m):
         all_sections.append({"section": "Modular Inverse", "subsections": [{"title": f"det⁻¹ mod 26 = {det_inv}", "content": f"{det} × {det_inv} mod 26 = {(det * det_inv) % 26}"}]})
         adj = adjugate(key_matrix)
         K_inv = [[(det_inv * adj[i][j]) % 26 for j in range(m)] for i in range(m)]
-        all_sections.append({"section": "Inverse Matrix", "subsections": [{"title": "K⁻¹ mod 26", "content": format_matrix(K_inv)}]})
+        # Ensure positive values
+        for i in range(m):
+            for j in range(m):
+                if K_inv[i][j] < 0:
+                    K_inv[i][j] += 26
         
-        dec_lines = ["Decryption: P = K⁻¹ × C (mod 26)", ""]
+        # Detailed inverse calculation
+        inv_lines = []
+        inv_lines.append("Formula: [K⁻¹]ᵢⱼ = det⁻¹ × (-1)^(i+j) × Dⱼᵢ mod 26")
+        inv_lines.append("")
+        inv_lines.append("STEP 1: Calculate Cofactor Matrix C")
+        inv_lines.append("─" * 45)
+        inv_lines.append("Cᵢⱼ = (-1)^(i+j) × Mᵢⱼ")
+        inv_lines.append("")
+        
+        cofactor_matrix = [[0] * m for _ in range(m)]
+        for i in range(m):
+            for j in range(m):
+                minor = []
+                for mi in range(m):
+                    if mi == i:
+                        continue
+                    row = [key_matrix[mi][mj] for mj in range(m) if mj != j]
+                    minor.append(row)
+                
+                inv_lines.append(f"─ M[{i+1},{j+1}] (delete row {i+1}, col {j+1}) ─")
+                inv_lines.append("")
+                # Display the minor matrix
+                for row in minor:
+                    inv_lines.append("  [ " + "  ".join(f"{x:3}" for x in row) + " ]")
+                inv_lines.append("")
+                
+                if len(minor) == 1:
+                    minor_det = minor[0][0]
+                    inv_lines.append(f"  det(M[{i+1},{j+1}]) = {minor_det}")
+                elif len(minor) == 2:
+                    a, b = minor[0][0], minor[0][1]
+                    c, d = minor[1][0], minor[1][1]
+                    minor_det = a * d - b * c
+                    inv_lines.append(f"  det(M[{i+1},{j+1}]) = ({a}×{d}) - ({b}×{c})")
+                    inv_lines.append(f"                = {a*d} - {b*c} = {minor_det}")
+                else:
+                    minor_det = determinant(minor)
+                    inv_lines.append(f"  det(M[{i+1},{j+1}]) = {minor_det}")
+                
+                sign = ((-1) ** (i + j))
+                cofactor = sign * minor_det
+                cofactor_matrix[i][j] = cofactor
+                sign_str = "+" if sign == 1 else "-"
+                inv_lines.append("")
+                inv_lines.append(f"  C[{i+1},{j+1}] = (-1)^({i+1}+{j+1}) × det(M[{i+1},{j+1}])")
+                inv_lines.append(f"        = ({sign_str}1) × {minor_det} = {cofactor}")
+                inv_lines.append("")
+        
+        inv_lines.append("")
+        inv_lines.append("Cofactor Matrix C:")
+        inv_lines.append(format_matrix(cofactor_matrix))
+        inv_lines.append("")
+        inv_lines.append("STEP 2: Adjugate = Transpose of C")
+        inv_lines.append("─" * 45)
+        inv_lines.append(format_matrix(adj))
+        inv_lines.append("")
+        inv_lines.append("STEP 3: K⁻¹ = det⁻¹ × adj(K) mod 26")
+        inv_lines.append("─" * 45)
+        for i in range(m):
+            for j in range(m):
+                inv_lines.append(f"K⁻¹[{i+1},{j+1}] = {det_inv} × {adj[i][j]} mod 26 = {K_inv[i][j]}")
+        inv_lines.append("")
+        inv_lines.append("Inverse Matrix K⁻¹:")
+        inv_lines.append(format_matrix(K_inv))
+        
+        all_sections.append({"section": "Inverse Matrix", "subsections": [{"title": "K⁻¹ mod 26", "content": '\n'.join(inv_lines)}]})
+        
+        dec_lines = ["Decryption Formula: pᵢ = Σ(k⁻¹ⱼᵢ × cⱼ) mod 26", ""]
+        dec_lines.append("For pᵢ, use COLUMN i of K⁻¹")
+        dec_lines.append("")
         decrypted_nums = []
         for block in range(block_count):
             block_start = block * m
             C_block = cipher_nums[block_start:block_start + m]
+            dec_lines.append(f"Block {block + 1}: C = [{', '.join(map(str, C_block))}]")
+            dec_lines.append("")
             P_block = []
             for i in range(m):
-                total = sum(K_inv[i][j] * C_block[j] for j in range(m))
-                P_block.append(total % 26)
+                # Use COLUMN i of K_inv
+                products = [f"{K_inv[j][i]}×{C_block[j]}" for j in range(m)]
+                total = sum(K_inv[j][i] * C_block[j] for j in range(m))
+                result = total % 26
+                P_block.append(result)
+                dec_lines.append(f"  p{i+1} = ({' + '.join(products)}) = {total} mod 26 = {result}")
             decrypted_nums.extend(P_block)
+            dec_lines.append(f"  Decrypted: [{', '.join(map(str, P_block))}]")
+            dec_lines.append("")
         decrypted_text = ''.join(num_to_char(n) for n in decrypted_nums)
         dec_lines.append(f"Decrypted = {decrypted_text}")
         all_sections.append({"section": "Decryption", "subsections": [{"title": "Result", "content": '\n'.join(dec_lines)}]})
