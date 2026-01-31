@@ -36,6 +36,18 @@
             "dest": "/api/adfgvx.py"
         },
         {
+            "src": "/api/extended-euclidean",
+            "dest": "/api/extended-euclidean.py"
+        },
+        {
+            "src": "/api/mod-exp",
+            "dest": "/api/mod-exp.py"
+        },
+        {
+            "src": "/api/gcd",
+            "dest": "/api/gcd.py"
+        },
+        {
             "src": "/(.*)",
             "dest": "/public/$1"
         }
