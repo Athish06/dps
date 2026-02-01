@@ -278,12 +278,12 @@ async function encrypt() {
         }
 
         // Send to API
-        const response = await fetch('/api/sdes', {
+        const response = await fetch('/api/co1', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(data)
+            body: JSON.stringify({ cipher: 'sdes', ...data })
         });
 
         const result = await response.json();

@@ -76,10 +76,10 @@ async function process() {
             return;
         }
 
-        const response = await fetch('/api/monoalphabetic', {
+        const response = await fetch('/api/co1', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ plaintext, mode, operation, key_k, key_a, key_b })
+            body: JSON.stringify({ cipher: 'monoalphabetic', plaintext, mode, operation, key_k, key_a, key_b })
         });
 
         const result = await response.json();

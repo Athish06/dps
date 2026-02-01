@@ -104,10 +104,10 @@ async function encrypt() {
             return;
         }
 
-        const response = await fetch('/api/hill', {
+        const response = await fetch('/api/co1', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ plaintext, keyMatrix, m })
+            body: JSON.stringify({ cipher: 'hill', plaintext, keyMatrix, m })
         });
 
         const result = await response.json();

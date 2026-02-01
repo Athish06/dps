@@ -36,10 +36,10 @@ async function encrypt() {
             return;
         }
 
-        const response = await fetch('/api/rsa', {
+        const response = await fetch('/api/co2', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ p, q, e, m })
+            body: JSON.stringify({ cipher: 'rsa', p, q, e, m })
         });
 
         const result = await response.json();

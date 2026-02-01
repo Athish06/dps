@@ -32,10 +32,10 @@ async function encrypt() {
             return;
         }
 
-        const response = await fetch('/api/playfair', {
+        const response = await fetch('/api/co1', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ plaintext, keyword })
+            body: JSON.stringify({ cipher: 'playfair', plaintext, keyword })
         });
 
         const result = await response.json();

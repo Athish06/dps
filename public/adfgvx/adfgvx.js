@@ -35,6 +35,7 @@ async function process(mode) {
 
     try {
         const body = {
+            cipher: 'adfgvx',
             mode: mode,
             polyKey: polyKey,
             transKey: transKey
@@ -46,7 +47,7 @@ async function process(mode) {
             body.ciphertext = inputText;
         }
 
-        const response = await fetch(`${API_BASE}/api/adfgvx`, {
+        const response = await fetch(`${API_BASE}/api/co1`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(body)

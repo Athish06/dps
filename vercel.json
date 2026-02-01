@@ -12,32 +12,12 @@
     ],
     "routes": [
         {
-            "src": "/api/sdes",
-            "dest": "/api/sdes.py"
+            "src": "/api/co1",
+            "dest": "/api/co1.py"
         },
         {
-            "src": "/api/rsa",
-            "dest": "/api/rsa.py"
-        },
-        {
-            "src": "/api/hill",
-            "dest": "/api/hill.py"
-        },
-        {
-            "src": "/api/playfair",
-            "dest": "/api/playfair.py"
-        },
-        {
-            "src": "/api/monoalphabetic",
-            "dest": "/api/monoalphabetic.py"
-        },
-        {
-            "src": "/api/adfgvx",
-            "dest": "/api/adfgvx.py"
-        },
-        {
-            "src": "/api/vigenere",
-            "dest": "/api/vigenere.py"
+            "src": "/api/co2",
+            "dest": "/api/co2.py"
         },
         {
             "src": "/api/math-ops",
