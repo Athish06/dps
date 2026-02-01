@@ -1,104 +1,110 @@
 // ADFGVX Cipher JavaScript
 
-document.addEventListener('DOMContentLoaded', () => {
-    // Input focus select all
-    document.querySelectorAll('input').forEach(input => {
-        input.addEventListener('focus', (e) => e.target.select());
-    });
+const API_BASE = window.location.hostname === 'localhost'
+    ? 'http://localhost:8000'
+    : '';
 
-    document.getElementById('encryptBtn').addEventListener('click', encrypt);
+document.getElementById('encryptBtn').addEventListener('click', () => process('encrypt'));
+document.getElementById('decryptBtn').addEventListener('click', () => process('decrypt'));
+
+// Enter key triggers encryption
+document.querySelectorAll('.text-input').forEach(input => {
+    input.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') process('encrypt');
+    });
 });
 
-async function encrypt() {
-    const btn = document.getElementById('encryptBtn');
-    const resultsSection = document.getElementById('resultsSection');
-    const resultsContent = document.getElementById('resultsContent');
+async function process(mode) {
+    const inputText = document.getElementById('inputText').value.trim();
+    const polyKey = document.getElementById('polyKey').value.trim();
+    const transKey = document.getElementById('transKey').value.trim();
 
-    btn.disabled = true;
-    btn.textContent = 'Processing...';
+    if (!inputText || !polyKey || !transKey) {
+        alert('Please fill in all fields');
+        return;
+    }
+
+    const encryptBtn = document.getElementById('encryptBtn');
+    const decryptBtn = document.getElementById('decryptBtn');
+    encryptBtn.disabled = true;
+    decryptBtn.disabled = true;
+
+    const activeBtn = mode === 'encrypt' ? encryptBtn : decryptBtn;
+    const originalText = activeBtn.textContent;
+    activeBtn.textContent = 'Processing...';
 
     try {
-        const plaintext = document.getElementById('plaintext').value;
-        const grid_key = document.getElementById('gridKey').value;
-        const trans_key = document.getElementById('transKey').value;
+        const body = {
+            mode: mode,
+            polyKey: polyKey,
+            transKey: transKey
+        };
 
-        // Validate
-        const errors = [];
-        if (!plaintext.trim()) errors.push('Plaintext cannot be empty');
-        if (!grid_key.trim()) errors.push('Polybius Square Key cannot be empty');
-        if (!trans_key.trim()) errors.push('Transposition Key cannot be empty');
-
-        if (errors.length > 0) {
-            resultsContent.innerHTML = `<div class="error">${errors.join('<br>')}</div>`;
-            resultsSection.classList.add('visible');
-            return;
+        if (mode === 'encrypt') {
+            body.plaintext = inputText;
+        } else {
+            body.ciphertext = inputText;
         }
 
-        const response = await fetch('/api/adfgvx', {
+        const response = await fetch(`${API_BASE}/api/adfgvx`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ plaintext, grid_key, trans_key })
+            body: JSON.stringify(body)
         });
 
-        const result = await response.json();
-        renderDetailedResults(result);
+        const data = await response.json();
 
+        if (data.success) {
+            displayResults(data);
+        } else {
+            alert('Error: ' + (data.error || 'Unknown error'));
+        }
     } catch (error) {
-        resultsContent.innerHTML = `<div class="error">Error: ${error.message}</div>`;
-        resultsSection.classList.add('visible');
+        console.error('Error:', error);
+        alert('Error connecting to server. Make sure the server is running.');
     } finally {
-        btn.disabled = false;
-        btn.textContent = 'Encrypt';
+        encryptBtn.disabled = false;
+        decryptBtn.disabled = false;
+        activeBtn.textContent = originalText;
     }
 }
 
-function renderDetailedResults(data) {
+function displayResults(data) {
     const resultsSection = document.getElementById('resultsSection');
     const resultsContent = document.getElementById('resultsContent');
 
+    resultsSection.style.display = 'block';
     resultsContent.innerHTML = '';
 
-    if (!data.success) {
-        resultsContent.innerHTML = `<div class="error">${data.error || 'ADFGVX cipher operation failed'}</div>`;
-        resultsSection.classList.add('visible');
-        return;
-    }
-
-    if (!data.sections || !Array.isArray(data.sections)) {
-        resultsContent.innerHTML = `<div class="error">Invalid response format</div>`;
-        resultsSection.classList.add('visible');
-        return;
-    }
-
-    data.sections.forEach((section, sectionIndex) => {
+    data.sections.forEach(section => {
         const sectionDiv = document.createElement('div');
         sectionDiv.className = 'result-section';
 
-        const sectionHeader = document.createElement('h3');
-        sectionHeader.className = 'section-header';
-        sectionHeader.innerHTML = `<span class="section-number">${sectionIndex + 1}</span>${section.section}`;
-        sectionDiv.appendChild(sectionHeader);
+        const header = document.createElement('div');
+        header.className = 'section-header';
+        header.innerHTML = `
+            <span>${section.section}</span>
+            <span class="toggle-icon">▼</span>
+        `;
+        header.onclick = () => {
+            sectionDiv.classList.toggle('collapsed');
+        };
 
-        section.subsections.forEach((subsection) => {
-            const subsectionDiv = document.createElement('div');
-            subsectionDiv.className = 'subsection';
+        const content = document.createElement('div');
+        content.className = 'section-content';
 
-            const subsectionTitle = document.createElement('h4');
-            subsectionTitle.className = 'subsection-title';
-            subsectionTitle.textContent = subsection.title;
-            subsectionDiv.appendChild(subsectionTitle);
-
-            const contentPre = document.createElement('pre');
-            contentPre.className = 'step-content';
-            contentPre.textContent = subsection.content;
-            subsectionDiv.appendChild(contentPre);
-
-            sectionDiv.appendChild(subsectionDiv);
+        section.subsections.forEach(sub => {
+            const subDiv = document.createElement('div');
+            subDiv.className = 'subsection';
+            subDiv.innerHTML = `
+                <div class="subsection-title">${sub.title}</div>
+                <pre class="step-content">${sub.content}</pre>
+            `;
+            content.appendChild(subDiv);
         });
 
+        sectionDiv.appendChild(header);
+        sectionDiv.appendChild(content);
         resultsContent.appendChild(sectionDiv);
     });
-
-    resultsSection.classList.add('visible');
-    resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }

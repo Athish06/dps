@@ -755,6 +755,21 @@ class DevHandler(http.server.SimpleHTTPRequestHandler):
                 modulus = int(data.get('modulus', 7))
                 result = fermat_module.fermat_theorem_detailed(base, exponent, modulus)
             
+            elif self.path == '/api/adfgvx':
+                import importlib.util
+                spec = importlib.util.spec_from_file_location("adfgvx", os.path.join(os.path.dirname(__file__), 'api', 'adfgvx.py'))
+                adfgvx_module = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(adfgvx_module)
+                mode = data.get('mode', 'encrypt')
+                poly_key = data.get('polyKey', 'privacy')
+                trans_key = data.get('transKey', 'cipher')
+                if mode == 'encrypt':
+                    plaintext = data.get('plaintext', 'attackat1200am')
+                    result = adfgvx_module.encrypt_adfgvx_detailed(plaintext, poly_key, trans_key)
+                else:
+                    ciphertext = data.get('ciphertext', '')
+                    result = adfgvx_module.decrypt_adfgvx_detailed(ciphertext, poly_key, trans_key)
+            
             else:
                 self.send_response(404)
                 self.end_headers()

@@ -37,11 +37,13 @@
         <!-- Input Section -->
         <div class="input-section">
             <h2 class="section-title">ADFGVX Cipher Parameters</h2>
+            <p style="margin-bottom: 1rem; opacity: 0.8;">WWI German cipher combining Polybius square substitution with
+                columnar transposition. Uses 6×6 grid (a-z + 0-9) with ADFGVX headers.</p>
 
             <div class="input-row">
                 <div class="input-group" style="flex: 2;">
-                    <label class="input-label">Plaintext (letters and digits)</label>
-                    <input type="text" class="text-input" id="plaintext" value="attackat1200am"
+                    <label class="input-label">Plaintext / Ciphertext</label>
+                    <input type="text" class="text-input" id="inputText" value="attackat1200am"
                         placeholder="Enter text...">
                 </div>
             </div>
@@ -49,7 +51,7 @@
             <div class="input-row">
                 <div class="input-group">
                     <label class="input-label">Polybius Square Key</label>
-                    <input type="text" class="text-input" id="gridKey" value="privacy"
+                    <input type="text" class="text-input" id="polyKey" value="privacy"
                         placeholder="Keyword for 6x6 grid...">
                 </div>
 
@@ -63,14 +65,18 @@
             <div class="info-box">
                 <strong>ADFGVX Cipher (WWI German Cipher):</strong>
                 <ul>
-                    <li><strong>Step 1:</strong> Create 6×6 Polybius Square (a-z + 0-9 = 36 chars)</li>
-                    <li><strong>Step 2:</strong> Bilateral Substitution (each char → 2 ADFGVX letters)</li>
-                    <li><strong>Step 3:</strong> Columnar Transposition (rearrange by key order)</li>
+                    <li><strong>Phase 1:</strong> Create 6×6 Polybius Square (a-z + 0-9 = 36 chars)</li>
+                    <li><strong>Phase 2:</strong> Fractionation - each character → pair of ADFGVX letters</li>
+                    <li><strong>Phase 3:</strong> Columnar Transposition - rearrange by key alphabetical order</li>
                 </ul>
             </div>
         </div>
 
-        <button class="encrypt-btn" id="encryptBtn">Encrypt</button>
+        <div class="button-row">
+            <button class="encrypt-btn" id="encryptBtn">Encrypt</button>
+            <button class="encrypt-btn" id="decryptBtn"
+                style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">Decrypt</button>
+        </div>
 
         <!-- Results -->
         <div class="results-section" id="resultsSection">
