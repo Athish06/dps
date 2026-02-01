@@ -798,7 +798,7 @@ class DevHandler(http.server.SimpleHTTPRequestHandler):
                 operation = data.get('operation', 'gcd')
                 
                 if operation == 'gcd':
-                    spec = importlib.util.spec_from_file_location("gcd", os.path.join(os.path.dirname(__file__), 'api', 'gcd.py'))
+                    spec = importlib.util.spec_from_file_location("gcd", os.path.join(os.path.dirname(__file__), 'api', 'lib', 'gcd.py'))
                     gcd_module = importlib.util.module_from_spec(spec)
                     spec.loader.exec_module(gcd_module)
                     a = int(data.get('a', 48))
@@ -806,7 +806,7 @@ class DevHandler(http.server.SimpleHTTPRequestHandler):
                     result = gcd_module.gcd_detailed(a, b)
                     
                 elif operation == 'extended-euclidean':
-                    spec = importlib.util.spec_from_file_location("extended_euclidean", os.path.join(os.path.dirname(__file__), 'api', 'extended-euclidean.py'))
+                    spec = importlib.util.spec_from_file_location("extended_euclidean", os.path.join(os.path.dirname(__file__), 'api', 'lib', 'extended-euclidean.py'))
                     ee_module = importlib.util.module_from_spec(spec)
                     spec.loader.exec_module(ee_module)
                     a = int(data.get('a', 17))
@@ -814,7 +814,7 @@ class DevHandler(http.server.SimpleHTTPRequestHandler):
                     result = ee_module.extended_euclidean_detailed(a, m)
                     
                 elif operation == 'mod-exp':
-                    spec = importlib.util.spec_from_file_location("mod_exp", os.path.join(os.path.dirname(__file__), 'api', 'mod-exp.py'))
+                    spec = importlib.util.spec_from_file_location("mod_exp", os.path.join(os.path.dirname(__file__), 'api', 'lib', 'mod-exp.py'))
                     me_module = importlib.util.module_from_spec(spec)
                     spec.loader.exec_module(me_module)
                     a = int(data.get('a', 7))
@@ -823,7 +823,7 @@ class DevHandler(http.server.SimpleHTTPRequestHandler):
                     result = me_module.mod_exp_detailed(a, n, m)
                     
                 elif operation == 'euler':
-                    spec = importlib.util.spec_from_file_location("euler", os.path.join(os.path.dirname(__file__), 'api', 'euler.py'))
+                    spec = importlib.util.spec_from_file_location("euler", os.path.join(os.path.dirname(__file__), 'api', 'lib', 'euler.py'))
                     euler_module = importlib.util.module_from_spec(spec)
                     spec.loader.exec_module(euler_module)
                     base = int(data.get('base', 7))
@@ -832,7 +832,7 @@ class DevHandler(http.server.SimpleHTTPRequestHandler):
                     result = euler_module.euler_theorem_detailed(base, exponent, modulus)
                     
                 elif operation == 'fermat':
-                    spec = importlib.util.spec_from_file_location("fermat", os.path.join(os.path.dirname(__file__), 'api', 'fermat.py'))
+                    spec = importlib.util.spec_from_file_location("fermat", os.path.join(os.path.dirname(__file__), 'api', 'lib', 'fermat.py'))
                     fermat_module = importlib.util.module_from_spec(spec)
                     spec.loader.exec_module(fermat_module)
                     base = int(data.get('base', 3))

@@ -10,8 +10,8 @@ import os
 import importlib.util
 
 def load_module(name):
-    """Dynamically load a module from the api directory"""
-    module_path = os.path.join(os.path.dirname(__file__), f'{name}.py')
+    """Dynamically load a module from the api/lib directory"""
+    module_path = os.path.join(os.path.dirname(__file__), 'lib', f'{name}.py')
     spec = importlib.util.spec_from_file_location(name, module_path)
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
