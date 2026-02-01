@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Vigenère & Autokey Cipher - Polyalphabetic substitution with detailed steps">
+    <title>Vigenère Cipher</title>
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔑</text></svg>">
+    <link rel="stylesheet" href="../styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div>
+                <a href="../index.html" class="back-link">← Back</a>
+                <h1>Vigenère Cipher</h1>
+                <p class="subtitle">chummah pannom</p>
+            </div>
+            <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                <svg id="sunIcon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+                <svg id="moonIcon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor" style="display: none;">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                </svg>
+                <span id="themeText">Dark</span>
+            </button>
+        </header>
+
+        <!-- Input Section -->
+        <div class="input-section">
+            <h2 class="section-title">Vigenère Cipher Parameters</h2>
+            <p style="margin-bottom: 1rem; opacity: 0.8;">Polyalphabetic substitution cipher. Choose between Standard
+                Vigenère (repeating key) or Autokey (key + plaintext).</p>
+
+            <div class="input-row">
+                <div class="input-group" style="flex: 2;">
+                    <label class="input-label">Plaintext / Ciphertext</label>
+                    <input type="text" class="text-input" id="inputText" value="WEAREDISCOVERED"
+                        placeholder="Enter text (letters only)...">
+                </div>
+            </div>
+
+            <div class="input-row">
+                <div class="input-group">
+                    <label class="input-label">Keyword</label>
+                    <input type="text" class="text-input" id="keyInput" value="DECEPTIVE"
+                        placeholder="Enter keyword...">
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">Cipher Type</label>
+                    <select class="text-input" id="cipherType">
+                        <option value="vigenere">Standard Vigenère</option>
+                        <option value="autokey">Autokey Cipher</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <strong>Vigenère vs Autokey:</strong>
+                <ul>
+                    <li><strong>Standard Vigenère:</strong> Key repeats (KEYKEYKEY...) - vulnerable to pattern analysis
+                    </li>
+                    <li><strong>Autokey:</strong> Key = Keyword + Plaintext - more secure, no repetition</li>
+                </ul>
+                <p style="margin-top: 0.5rem;"><strong>Formulas:</strong> Encrypt: C = (P + K) mod 26 | Decrypt: P = (C
+                    - K) mod 26</p>
+            </div>
+        </div>
+
+        <div class="button-row">
+            <button class="encrypt-btn" id="encryptBtn">Encrypt</button>
+            <button class="encrypt-btn" id="decryptBtn"
+                style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">Decrypt</button>
+        </div>
+
+        <!-- Results -->
+        <div class="results-section" id="resultsSection">
+            <h2 class="section-title">Step-by-Step Process</h2>
+            <div id="resultsContent"></div>
+        </div>
+    </div>
+
+    <script src="../common.js"></script>
+    <script src="vigenere.js"></script>
+</body>
+
+</html>

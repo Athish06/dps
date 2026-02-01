@@ -56,6 +56,10 @@
             "dest": "/api/fermat.py"
         },
         {
+            "src": "/api/vigenere",
+            "dest": "/api/vigenere.py"
+        },
+        {
             "src": "/(.*)",
             "dest": "/public/$1"
         }

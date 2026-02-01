@@ -770,6 +770,29 @@ class DevHandler(http.server.SimpleHTTPRequestHandler):
                     ciphertext = data.get('ciphertext', '')
                     result = adfgvx_module.decrypt_adfgvx_detailed(ciphertext, poly_key, trans_key)
             
+            elif self.path == '/api/vigenere':
+                import importlib.util
+                spec = importlib.util.spec_from_file_location("vigenere", os.path.join(os.path.dirname(__file__), 'api', 'vigenere.py'))
+                vigenere_module = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(vigenere_module)
+                mode = data.get('mode', 'encrypt')
+                cipher_type = data.get('cipherType', 'vigenere')
+                key = data.get('key', 'KEY')
+                if cipher_type == 'vigenere':
+                    if mode == 'encrypt':
+                        plaintext = data.get('plaintext', 'HELLO')
+                        result = vigenere_module.vigenere_encrypt_detailed(plaintext, key)
+                    else:
+                        ciphertext = data.get('ciphertext', '')
+                        result = vigenere_module.vigenere_decrypt_detailed(ciphertext, key)
+                else:  # autokey
+                    if mode == 'encrypt':
+                        plaintext = data.get('plaintext', 'HELLO')
+                        result = vigenere_module.autokey_encrypt_detailed(plaintext, key)
+                    else:
+                        ciphertext = data.get('ciphertext', '')
+                        result = vigenere_module.autokey_decrypt_detailed(ciphertext, key)
+            
             else:
                 self.send_response(404)
                 self.end_headers()
