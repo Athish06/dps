@@ -28,10 +28,10 @@ async function calculate() {
     btn.textContent = 'Calculating...';
 
     try {
-        const response = await fetch(`${API_BASE}/api/mod-exp`, {
+        const response = await fetch(`${API_BASE}/api/math-ops`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ a, n, m })
+            body: JSON.stringify({ operation: 'mod-exp', a, n, m })
         });
 
         const data = await response.json();

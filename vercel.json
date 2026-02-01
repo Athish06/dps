@@ -36,28 +36,12 @@
             "dest": "/api/adfgvx.py"
         },
         {
-            "src": "/api/extended-euclidean",
-            "dest": "/api/extended-euclidean.py"
-        },
-        {
-            "src": "/api/mod-exp",
-            "dest": "/api/mod-exp.py"
-        },
-        {
-            "src": "/api/gcd",
-            "dest": "/api/gcd.py"
-        },
-        {
-            "src": "/api/euler",
-            "dest": "/api/euler.py"
-        },
-        {
-            "src": "/api/fermat",
-            "dest": "/api/fermat.py"
-        },
-        {
             "src": "/api/vigenere",
             "dest": "/api/vigenere.py"
+        },
+        {
+            "src": "/api/math-ops",
+            "dest": "/api/math-ops.py"
         },
         {
             "src": "/(.*)",

@@ -27,10 +27,10 @@ async function calculate() {
     btn.textContent = 'Calculating...';
 
     try {
-        const response = await fetch(`${API_BASE}/api/gcd`, {
+        const response = await fetch(`${API_BASE}/api/math-ops`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ a, b })
+            body: JSON.stringify({ operation: 'gcd', a, b })
         });
 
         const data = await response.json();

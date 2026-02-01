@@ -27,10 +27,10 @@ async function calculate() {
     btn.textContent = 'Calculating...';
 
     try {
-        const response = await fetch(`${API_BASE}/api/extended-euclidean`, {
+        const response = await fetch(`${API_BASE}/api/math-ops`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ a, m })
+            body: JSON.stringify({ operation: 'extended-euclidean', a, m })
         });
 
         const data = await response.json();

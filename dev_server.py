@@ -793,6 +793,56 @@ class DevHandler(http.server.SimpleHTTPRequestHandler):
                         ciphertext = data.get('ciphertext', '')
                         result = vigenere_module.autokey_decrypt_detailed(ciphertext, key)
             
+            elif self.path == '/api/math-ops':
+                import importlib.util
+                operation = data.get('operation', 'gcd')
+                
+                if operation == 'gcd':
+                    spec = importlib.util.spec_from_file_location("gcd", os.path.join(os.path.dirname(__file__), 'api', 'gcd.py'))
+                    gcd_module = importlib.util.module_from_spec(spec)
+                    spec.loader.exec_module(gcd_module)
+                    a = int(data.get('a', 48))
+                    b = int(data.get('b', 18))
+                    result = gcd_module.gcd_detailed(a, b)
+                    
+                elif operation == 'extended-euclidean':
+                    spec = importlib.util.spec_from_file_location("extended_euclidean", os.path.join(os.path.dirname(__file__), 'api', 'extended-euclidean.py'))
+                    ee_module = importlib.util.module_from_spec(spec)
+                    spec.loader.exec_module(ee_module)
+                    a = int(data.get('a', 17))
+                    m = int(data.get('m', 26))
+                    result = ee_module.extended_euclidean_detailed(a, m)
+                    
+                elif operation == 'mod-exp':
+                    spec = importlib.util.spec_from_file_location("mod_exp", os.path.join(os.path.dirname(__file__), 'api', 'mod-exp.py'))
+                    me_module = importlib.util.module_from_spec(spec)
+                    spec.loader.exec_module(me_module)
+                    a = int(data.get('a', 7))
+                    n = int(data.get('n', 256))
+                    m = int(data.get('m', 13))
+                    result = me_module.mod_exp_detailed(a, n, m)
+                    
+                elif operation == 'euler':
+                    spec = importlib.util.spec_from_file_location("euler", os.path.join(os.path.dirname(__file__), 'api', 'euler.py'))
+                    euler_module = importlib.util.module_from_spec(spec)
+                    spec.loader.exec_module(euler_module)
+                    base = int(data.get('base', 7))
+                    exponent = int(data.get('exponent', 256))
+                    modulus = int(data.get('modulus', 13))
+                    result = euler_module.euler_theorem_detailed(base, exponent, modulus)
+                    
+                elif operation == 'fermat':
+                    spec = importlib.util.spec_from_file_location("fermat", os.path.join(os.path.dirname(__file__), 'api', 'fermat.py'))
+                    fermat_module = importlib.util.module_from_spec(spec)
+                    spec.loader.exec_module(fermat_module)
+                    base = int(data.get('base', 3))
+                    exponent = int(data.get('exponent', 100))
+                    modulus = int(data.get('modulus', 7))
+                    result = fermat_module.fermat_theorem_detailed(base, exponent, modulus)
+                    
+                else:
+                    result = {"success": False, "error": f"Unknown operation: {operation}"}
+            
             else:
                 self.send_response(404)
                 self.end_headers()
