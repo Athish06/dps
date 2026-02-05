@@ -144,11 +144,12 @@ def extended_euclidean_detailed(a, m):
         lines.append("═" * 55)
         return None, '\n'.join(lines)
     
-    inverse = s1
+    # The inverse is t1 (coefficient of 'a' in the Bézout identity)
+    inverse = t1
     if inverse < 0:
         lines.append("ADJUSTMENT:")
         lines.append("─" * 40)
-        lines.append(f"Coefficient s = {inverse} is negative")
+        lines.append(f"Coefficient t = {inverse} is negative")
         lines.append(f"Adjusting: {inverse} + {m} = {inverse + m}")
         lines.append("─" * 40)
         lines.append("")

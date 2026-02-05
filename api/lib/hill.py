@@ -95,8 +95,10 @@ def format_matrix(matrix, indent=""):
         lines.append(indent + "[ " + "  ".join(f"{x:3}" for x in row) + " ]")
     return '\n'.join(lines)
 
-def hill_cipher_detailed(plaintext, key_matrix, m):
-    """Hill Cipher with detailed steps"""
+def hill_cipher_detailed(plaintext, key_matrix, m, vector_mode='column'):
+    """Hill Cipher with detailed steps
+    vector_mode: 'column' for K × P (exam format), 'row' for P × K
+    """
     all_sections = []
     
     # Section 1: Alphabet Mapping
@@ -114,6 +116,7 @@ S=18  T=19  U=20  V=21  W=22  X=23  Y=24  Z=25"""
     input_lines = []
     input_lines.append(f"Plaintext: {plaintext}")
     input_lines.append(f"Matrix Size: {m}×{m}")
+    input_lines.append(f"Vector Mode: {'Column Vector (K × P)' if vector_mode == 'column' else 'Row Vector (P × K)'}")
     input_lines.append("")
     input_lines.append("Key Matrix K:")
     input_lines.append(format_matrix(key_matrix, "  "))
@@ -140,12 +143,27 @@ S=18  T=19  U=20  V=21  W=22  X=23  Y=24  Z=25"""
     
     # Section 4: Encryption - Matrix Multiplication
     enc_lines = []
-    enc_lines.append("Encryption Formula: cᵢ = Σ(kⱼᵢ × pⱼ) mod 26")
-    enc_lines.append("")
-    enc_lines.append("For each cipher element cᵢ, we use COLUMN i of the key matrix:")
-    enc_lines.append("  c₁ = (k₁₁×p₁ + k₂₁×p₂ + k₃₁×p₃) mod 26")
-    enc_lines.append("  c₂ = (k₁₂×p₁ + k₂₂×p₂ + k₃₂×p₃) mod 26")
-    enc_lines.append("  etc.")
+    
+    if vector_mode == 'column':
+        # Column vector mode: C = K × P (standard exam format)
+        enc_lines.append("Encryption Formula (Column Vector): C = K × P (mod 26)")
+        enc_lines.append("")
+        enc_lines.append("Plaintext is treated as a column vector (m×1 matrix).")
+        enc_lines.append("Each row of K multiplied by the plaintext column vector gives one ciphertext element.")
+        enc_lines.append("")
+        enc_lines.append("For each cipher element cᵢ, we use ROW i of the key matrix:")
+        enc_lines.append("  c₁ = (k₁₁×p₁ + k₁₂×p₂ + k₁₃×p₃) mod 26")
+        enc_lines.append("  c₂ = (k₂₁×p₁ + k₂₂×p₂ + k₂₃×p₃) mod 26")
+        enc_lines.append("  etc.")
+    else:
+        # Row vector mode: C = P × K (alternative format)
+        enc_lines.append("Encryption Formula (Row Vector): C = P × K (mod 26)")
+        enc_lines.append("")
+        enc_lines.append("Plaintext is treated as a row vector (1×m matrix).")
+        enc_lines.append("For each cipher element cᵢ, we use COLUMN i of the key matrix:")
+        enc_lines.append("  c₁ = (p₁×k₁₁ + p₂×k₂₁ + p₃×k₃₁) mod 26")
+        enc_lines.append("  c₂ = (p₁×k₁₂ + p₂×k₂₂ + p₃×k₃₂) mod 26")
+        enc_lines.append("  etc.")
     enc_lines.append("")
     
     # Process in blocks of m characters
@@ -158,16 +176,26 @@ S=18  T=19  U=20  V=21  W=22  X=23  Y=24  Z=25"""
         
         enc_lines.append(f"Block {block + 1}: P = [{', '.join(map(str, P_block))}]")
         enc_lines.append("")
-        enc_lines.append("Matrix Multiplication (using columns of K):")
+        
+        if vector_mode == 'column':
+            enc_lines.append("Matrix Multiplication (K × P, using rows of K):")
+        else:
+            enc_lines.append("Matrix Multiplication (P × K, using columns of K):")
         enc_lines.append("")
         
         C_block = []
         for i in range(m):
-            # Use COLUMN i of key matrix: key_matrix[j][i] for j=0,1,...,m-1
-            col_values = [key_matrix[j][i] for j in range(m)]
-            products = [f"k{j+1}{i+1}×p{j+1}" for j in range(m)]
-            products_with_values = [f"{key_matrix[j][i]}×{P_block[j]}" for j in range(m)]
-            total = sum(key_matrix[j][i] * P_block[j] for j in range(m))
+            if vector_mode == 'column':
+                # Column vector: use ROW i of key matrix: key_matrix[i][j] for j=0,1,...,m-1
+                products = [f"k{i+1}{j+1}×p{j+1}" for j in range(m)]
+                products_with_values = [f"{key_matrix[i][j]}×{P_block[j]}" for j in range(m)]
+                total = sum(key_matrix[i][j] * P_block[j] for j in range(m))
+            else:
+                # Row vector: use COLUMN i of key matrix: key_matrix[j][i] for j=0,1,...,m-1
+                products = [f"p{j+1}×k{j+1}{i+1}" for j in range(m)]
+                products_with_values = [f"{P_block[j]}×{key_matrix[j][i]}" for j in range(m)]
+                total = sum(P_block[j] * key_matrix[j][i] for j in range(m))
+            
             result = total % 26
             C_block.append(result)
             enc_lines.append(f"  c{i+1} = ({' + '.join(products)})")
@@ -181,7 +209,7 @@ S=18  T=19  U=20  V=21  W=22  X=23  Y=24  Z=25"""
     
     all_sections.append({
         "section": "Encryption - Matrix Multiplication",
-        "subsections": [{"title": "C = K × P (mod 26)", "content": '\n'.join(enc_lines)}]
+        "subsections": [{"title": f"C = {'K × P' if vector_mode == 'column' else 'P × K'} (mod 26)", "content": '\n'.join(enc_lines)}]
     })
     
     # Section 5: Convert to Ciphertext
@@ -344,7 +372,10 @@ S=18  T=19  U=20  V=21  W=22  X=23  Y=24  Z=25"""
         
         # Section 9: Decryption
         dec_lines = []
-        dec_lines.append("Decryption Formula: P = K⁻¹ × C (mod 26)")
+        if vector_mode == 'column':
+            dec_lines.append("Decryption Formula (Column Vector): P = K⁻¹ × C (mod 26)")
+        else:
+            dec_lines.append("Decryption Formula (Row Vector): P = C × K⁻¹ (mod 26)")
         dec_lines.append("")
         
         decrypted_nums = []
@@ -354,14 +385,24 @@ S=18  T=19  U=20  V=21  W=22  X=23  Y=24  Z=25"""
             
             dec_lines.append(f"Block {block + 1}: C = [{', '.join(map(str, C_block))}]")
             dec_lines.append("")
-            dec_lines.append("Matrix Multiplication (using columns of K⁻¹):")
+            
+            if vector_mode == 'column':
+                dec_lines.append("Matrix Multiplication (K⁻¹ × C, using rows of K⁻¹):")
+            else:
+                dec_lines.append("Matrix Multiplication (C × K⁻¹, using columns of K⁻¹):")
             dec_lines.append("")
             
             P_block = []
             for i in range(m):
-                # Use COLUMN i of K_inv
-                products = [f"{K_inv[j][i]}×{C_block[j]}" for j in range(m)]
-                total = sum(K_inv[j][i] * C_block[j] for j in range(m))
+                if vector_mode == 'column':
+                    # Column vector: use ROW i of K_inv
+                    products = [f"{K_inv[i][j]}×{C_block[j]}" for j in range(m)]
+                    total = sum(K_inv[i][j] * C_block[j] for j in range(m))
+                else:
+                    # Row vector: use COLUMN i of K_inv
+                    products = [f"{C_block[j]}×{K_inv[j][i]}" for j in range(m)]
+                    total = sum(C_block[j] * K_inv[j][i] for j in range(m))
+                
                 result = total % 26
                 P_block.append(result)
                 dec_lines.append(f"  p{i+1} = ({' + '.join(products)})")
@@ -377,7 +418,7 @@ S=18  T=19  U=20  V=21  W=22  X=23  Y=24  Z=25"""
         
         all_sections.append({
             "section": "Decryption - Matrix Multiplication",
-            "subsections": [{"title": "P = K⁻¹ × C (mod 26)", "content": '\n'.join(dec_lines)}]
+            "subsections": [{"title": f"P = {'K⁻¹ × C' if vector_mode == 'column' else 'C × K⁻¹'} (mod 26)", "content": '\n'.join(dec_lines)}]
         })
     else:
         decrypted_text = "Cannot decrypt - matrix not invertible"

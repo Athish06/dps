@@ -88,6 +88,7 @@ async function encrypt() {
         const plaintext = document.getElementById('plaintext').value.toUpperCase().replace(/[^A-Z]/g, '');
         const keyMatrix = getMatrixValues();
         const m = currentMatrixSize;
+        const vectorMode = document.getElementById('vectorMode').value;
 
         // Validate
         const errors = [];
@@ -107,7 +108,7 @@ async function encrypt() {
         const response = await fetch('/api/co1', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ cipher: 'hill', plaintext, keyMatrix, m })
+            body: JSON.stringify({ cipher: 'hill', plaintext, keyMatrix, m, vectorMode })
         });
 
         const result = await response.json();

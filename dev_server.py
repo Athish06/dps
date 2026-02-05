@@ -480,12 +480,13 @@ def format_matrix(matrix, indent=""):
         lines.append(indent + "[ " + "  ".join(f"{x:3}" for x in row) + " ]")
     return '\n'.join(lines)
 
-def hill_cipher_detailed(plaintext, key_matrix, m):
+def hill_cipher_detailed(plaintext, key_matrix, m, vector_mode='column'):
     all_sections = []
     mapping_content = "A=0  B=1  C=2  D=3  E=4  F=5  G=6  H=7  I=8  J=9\nK=10 L=11 M=12 N=13 O=14 P=15 Q=16 R=17 S=18 T=19\nU=20 V=21 W=22 X=23 Y=24 Z=25"
     all_sections.append({"section": "Alphabet Mapping", "subsections": [{"title": "A=0, B=1, ..., Z=25", "content": mapping_content}]})
     
-    input_lines = [f"Plaintext: {plaintext}", f"Matrix Size: {m}×{m}", "", "Key Matrix K:", format_matrix(key_matrix, "  ")]
+    mode_str = 'Column Vector (K × P)' if vector_mode == 'column' else 'Row Vector (P × K)'
+    input_lines = [f"Plaintext: {plaintext}", f"Matrix Size: {m}×{m}", f"Vector Mode: {mode_str}", "", "Key Matrix K:", format_matrix(key_matrix, "  ")]
     all_sections.append({"section": "Input Parameters", "subsections": [{"title": "Given Values", "content": '\n'.join(input_lines)}]})
     
     plaintext_nums = [char_to_num(c) for c in plaintext]
@@ -495,8 +496,13 @@ def hill_cipher_detailed(plaintext, key_matrix, m):
     conv_lines.append(f"\nPlaintext Vector P = [{', '.join(map(str, plaintext_nums))}]")
     all_sections.append({"section": "Convert Plaintext to Numbers", "subsections": [{"title": "Character to Number", "content": '\n'.join(conv_lines)}]})
     
-    enc_lines = ["Encryption Formula: cᵢ = Σ(kⱼᵢ × pⱼ) mod 26", ""]
-    enc_lines.append("For cᵢ, use COLUMN i of key matrix")
+    enc_lines = []
+    if vector_mode == 'column':
+        enc_lines.append("Encryption Formula (Column Vector): C = K × P (mod 26)")
+        enc_lines.append("\nFor cᵢ, use ROW i of key matrix")
+    else:
+        enc_lines.append("Encryption Formula (Row Vector): C = P × K (mod 26)")
+        enc_lines.append("\nFor cᵢ, use COLUMN i of key matrix")
     enc_lines.append("")
     cipher_nums = []
     block_count = len(plaintext) // m
@@ -507,9 +513,14 @@ def hill_cipher_detailed(plaintext, key_matrix, m):
         enc_lines.append("")
         C_block = []
         for i in range(m):
-            # Use COLUMN i of key matrix
-            products = [f"{key_matrix[j][i]}×{P_block[j]}" for j in range(m)]
-            total = sum(key_matrix[j][i] * P_block[j] for j in range(m))
+            if vector_mode == 'column':
+                # Column vector: use ROW i of key matrix
+                products = [f"{key_matrix[i][j]}×{P_block[j]}" for j in range(m)]
+                total = sum(key_matrix[i][j] * P_block[j] for j in range(m))
+            else:
+                # Row vector: use COLUMN i of key matrix
+                products = [f"{P_block[j]}×{key_matrix[j][i]}" for j in range(m)]
+                total = sum(P_block[j] * key_matrix[j][i] for j in range(m))
             result = total % 26
             C_block.append(result)
             enc_lines.append(f"  c{i+1} = ({' + '.join(products)}) = {total} mod 26 = {result}")
@@ -606,8 +617,13 @@ def hill_cipher_detailed(plaintext, key_matrix, m):
         
         all_sections.append({"section": "Inverse Matrix", "subsections": [{"title": "K⁻¹ mod 26", "content": '\n'.join(inv_lines)}]})
         
-        dec_lines = ["Decryption Formula: pᵢ = Σ(k⁻¹ⱼᵢ × cⱼ) mod 26", ""]
-        dec_lines.append("For pᵢ, use COLUMN i of K⁻¹")
+        dec_lines = []
+        if vector_mode == 'column':
+            dec_lines.append("Decryption Formula (Column Vector): P = K⁻¹ × C (mod 26)")
+            dec_lines.append("\nFor pᵢ, use ROW i of K⁻¹")
+        else:
+            dec_lines.append("Decryption Formula (Row Vector): P = C × K⁻¹ (mod 26)")
+            dec_lines.append("\nFor pᵢ, use COLUMN i of K⁻¹")
         dec_lines.append("")
         decrypted_nums = []
         for block in range(block_count):
@@ -617,9 +633,14 @@ def hill_cipher_detailed(plaintext, key_matrix, m):
             dec_lines.append("")
             P_block = []
             for i in range(m):
-                # Use COLUMN i of K_inv
-                products = [f"{K_inv[j][i]}×{C_block[j]}" for j in range(m)]
-                total = sum(K_inv[j][i] * C_block[j] for j in range(m))
+                if vector_mode == 'column':
+                    # Column vector: use ROW i of K_inv
+                    products = [f"{K_inv[i][j]}×{C_block[j]}" for j in range(m)]
+                    total = sum(K_inv[i][j] * C_block[j] for j in range(m))
+                else:
+                    # Row vector: use COLUMN i of K_inv
+                    products = [f"{C_block[j]}×{K_inv[j][i]}" for j in range(m)]
+                    total = sum(C_block[j] * K_inv[j][i] for j in range(m))
                 result = total % 26
                 P_block.append(result)
                 dec_lines.append(f"  p{i+1} = ({' + '.join(products)}) = {total} mod 26 = {result}")
@@ -681,7 +702,8 @@ class DevHandler(http.server.SimpleHTTPRequestHandler):
                 plaintext = data.get('plaintext', 'ACT').upper()
                 key_matrix = data.get('keyMatrix', [[6,24,1],[13,16,10],[20,17,15]])
                 m = data.get('m', 3)
-                result = hill_cipher_detailed(plaintext, key_matrix, m)
+                vectorMode = data.get('vectorMode', 'column')
+                result = hill_cipher_detailed(plaintext, key_matrix, m, vectorMode)
             
             elif self.path == '/api/playfair':
                 from playfair import playfair_cipher_detailed
@@ -866,7 +888,8 @@ class DevHandler(http.server.SimpleHTTPRequestHandler):
                     plaintext = data.get('plaintext', 'HELLO')
                     keyMatrix = data.get('keyMatrix', [[6, 24, 1], [13, 16, 10], [20, 17, 15]])
                     m = data.get('m', 3)
-                    result = module.hill_cipher_detailed(plaintext, keyMatrix, m)
+                    vectorMode = data.get('vectorMode', 'column')
+                    result = module.hill_cipher_detailed(plaintext, keyMatrix, m, vectorMode)
                     
                 elif cipher == 'adfgvx':
                     spec = importlib.util.spec_from_file_location("adfgvx", os.path.join(os.path.dirname(__file__), 'api', 'lib', 'adfgvx.py'))

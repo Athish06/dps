@@ -59,7 +59,8 @@ class handler(BaseHTTPRequestHandler):
                 plaintext = data.get('plaintext', 'HELLO')
                 keyMatrix = data.get('keyMatrix', [[6, 24, 1], [13, 16, 10], [20, 17, 15]])
                 m = data.get('m', 3)
-                result = module.hill_cipher_detailed(plaintext, keyMatrix, m)
+                vectorMode = data.get('vectorMode', 'column')
+                result = module.hill_cipher_detailed(plaintext, keyMatrix, m, vectorMode)
             
             elif cipher == 'adfgvx':
                 module = load_module('adfgvx')
