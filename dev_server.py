@@ -950,6 +950,20 @@ class DevHandler(http.server.SimpleHTTPRequestHandler):
                         else:
                             ciphertext = data.get('ciphertext', '')
                             result = module.autokey_decrypt_detailed(ciphertext, key)
+                
+                elif cipher == 'rail_fence':
+                    spec = importlib.util.spec_from_file_location("rail_fence", os.path.join(os.path.dirname(__file__), 'api', 'lib', 'rail_fence.py'))
+                    module = importlib.util.module_from_spec(spec)
+                    spec.loader.exec_module(module)
+                    mode = data.get('mode', 'encrypt')
+                    num_rails = int(data.get('numRails', 3))
+                    if mode == 'encrypt':
+                        plaintext = data.get('plaintext', 'WEAREDISCOVEREDFLEEATONCE')
+                        result = module.rail_fence_encrypt_detailed(plaintext, num_rails)
+                    else:
+                        ciphertext = data.get('ciphertext', '')
+                        result = module.rail_fence_decrypt_detailed(ciphertext, num_rails)
+                
                 else:
                     result = {"success": False, "error": f"Unknown cipher: {cipher}"}
             

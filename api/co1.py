@@ -114,6 +114,17 @@ class handler(BaseHTTPRequestHandler):
                         ciphertext = data.get('ciphertext', '')
                         result = module.autokey_decrypt_detailed(ciphertext, key)
             
+            elif cipher == 'rail_fence':
+                module = load_module('rail_fence')
+                mode = data.get('mode', 'encrypt')
+                num_rails = int(data.get('numRails', 3))
+                if mode == 'encrypt':
+                    plaintext = data.get('plaintext', 'WEAREDISCOVEREDFLEEATONCE')
+                    result = module.rail_fence_encrypt_detailed(plaintext, num_rails)
+                else:
+                    ciphertext = data.get('ciphertext', '')
+                    result = module.rail_fence_decrypt_detailed(ciphertext, num_rails)
+            
             else:
                 result = {"success": False, "error": f"Unknown cipher: {cipher}"}
             
