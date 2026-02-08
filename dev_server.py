@@ -964,6 +964,20 @@ class DevHandler(http.server.SimpleHTTPRequestHandler):
                         ciphertext = data.get('ciphertext', '')
                         result = module.rail_fence_decrypt_detailed(ciphertext, num_rails)
                 
+                elif cipher == 'keyed':
+                    spec = importlib.util.spec_from_file_location("keyed_cipher", os.path.join(os.path.dirname(__file__), 'api', 'lib', 'keyed_cipher.py'))
+                    module = importlib.util.module_from_spec(spec)
+                    spec.loader.exec_module(module)
+                    mode = data.get('mode', 'encrypt')
+                    keyword = data.get('keyword', 'KEY')
+                    column_order = data.get('columnOrder', None)
+                    if mode == 'encrypt':
+                        plaintext = data.get('plaintext', 'WEAREDISCOVEREDFLEEATONCE')
+                        result = module.keyed_encrypt_detailed(plaintext, keyword, column_order)
+                    else:
+                        ciphertext = data.get('ciphertext', '')
+                        result = module.keyed_decrypt_detailed(ciphertext, keyword, column_order)
+                
                 else:
                     result = {"success": False, "error": f"Unknown cipher: {cipher}"}
             

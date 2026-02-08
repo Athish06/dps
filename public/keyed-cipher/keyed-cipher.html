@@ -4,10 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Rail Fence Cipher - Transposition cipher with zig-zag pattern encryption">
-    <title>Rail Fence Cipher</title>
+    <meta name="description" content="Keyed Columnar Transposition Cipher with step-by-step calculations">
+    <title>Keyed Columnar Cipher</title>
     <link rel="icon"
-        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚂</text></svg>">
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔑</text></svg>">
     <link rel="stylesheet" href="../styles.css">
 </head>
 
@@ -16,7 +16,7 @@
         <header>
             <div>
                 <a href="../transposition/transposition.html" class="back-link">← Back</a>
-                <h1>Rail Fence Cipher</h1>
+                <h1>Keyed Columnar Cipher</h1>
                 <p class="subtitle">chummah pannom</p>
             </div>
             <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
@@ -36,22 +36,13 @@
 
         <!-- Input Section -->
         <div class="input-section">
-            <h2 class="section-title">Rail Fence Cipher Parameters</h2>
-            <p style="margin-bottom: 1rem; opacity: 0.8;">Transposition cipher that writes text in a zig-zag pattern
-                across multiple rails, then reads row by row.</p>
+            <h2 class="section-title">Keyed Columnar Cipher Parameters</h2>
 
             <div class="input-row">
                 <div class="input-group" style="flex: 2;">
                     <label class="input-label">Plaintext / Ciphertext</label>
                     <input type="text" class="text-input" id="inputText" value="WEAREDISCOVEREDFLEEATONCE"
                         placeholder="Enter text (letters only)...">
-                </div>
-            </div>
-
-            <div class="input-row">
-                <div class="input-group">
-                    <label class="input-label">Number of Rails</label>
-                    <input type="number" class="number-input" id="numRails" value="3" min="2" max="10">
                 </div>
 
                 <div class="input-group">
@@ -63,16 +54,39 @@
                 </div>
             </div>
 
-            <div class="info-box">
-                <strong>Rail Fence Cipher:</strong>
-                <ul>
-                    <li><strong>Encryption:</strong> Write plaintext diagonally down and up in a zig-zag pattern, then
-                        read each rail left to right</li>
-                    <li><strong>Decryption:</strong> Calculate characters per rail, fill rails with ciphertext, read in
-                        zig-zag order</li>
-                    <li><strong>Key:</strong> Number of rails determines the pattern depth</li>
-                </ul>
+            <div class="input-row">
+                <div class="input-group" style="flex: 2;">
+                    <label class="input-label">Keyword</label>
+                    <input type="text" class="text-input" id="keyword" value="ZEBRAS"
+                        placeholder="Enter keyword (e.g., ZEBRAS)...">
+                </div>
             </div>
+        </div>
+
+        <!-- Column Order Section -->
+        <div class="input-section">
+            <h2 class="section-title">Column Read Order</h2>
+            <p style="margin-bottom: 1rem; opacity: 0.8;">
+                Enter the order in which columns should be read (1-indexed).
+                This is auto-calculated from the keyword, but you can customize it.
+            </p>
+
+            <div class="array-container">
+                <label class="array-label">Column Order (based on keyword alphabetical ranking)</label>
+                <div class="array-boxes" id="columnOrderBoxes"></div>
+            </div>
+        </div>
+
+        <div class="info-box">
+            <strong>Keyed Columnar Transposition:</strong>
+            <ul>
+                <li><strong>Keyword:</strong> Determines the number of columns and read order</li>
+                <li><strong>Column Order:</strong> Alphabetical ranking of keyword letters (ties: left-to-right)</li>
+                <li><strong>Encryption:</strong> Write plaintext row-by-row, read columns in order</li>
+                <li><strong>Decryption:</strong> Fill columns with ciphertext, read row-by-row</li>
+            </ul>
+            <p style="margin-top: 0.5rem;"><strong>Example:</strong> ZEBRAS → Order: 6,3,2,4,1,5 (A=1, B=2, E=3, R=4,
+                S=5, Z=6)</p>
         </div>
 
         <button class="encrypt-btn" id="processBtn">Process</button>
@@ -85,7 +99,7 @@
     </div>
 
     <script src="../common.js"></script>
-    <script src="rail-fence.js"></script>
+    <script src="keyed-cipher.js"></script>
 </body>
 
 </html>

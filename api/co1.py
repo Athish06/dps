@@ -125,6 +125,18 @@ class handler(BaseHTTPRequestHandler):
                     ciphertext = data.get('ciphertext', '')
                     result = module.rail_fence_decrypt_detailed(ciphertext, num_rails)
             
+            elif cipher == 'keyed':
+                module = load_module('keyed_cipher')
+                mode = data.get('mode', 'encrypt')
+                keyword = data.get('keyword', 'KEY')
+                column_order = data.get('columnOrder', None)
+                if mode == 'encrypt':
+                    plaintext = data.get('plaintext', 'WEAREDISCOVEREDFLEEATONCE')
+                    result = module.keyed_encrypt_detailed(plaintext, keyword, column_order)
+                else:
+                    ciphertext = data.get('ciphertext', '')
+                    result = module.keyed_decrypt_detailed(ciphertext, keyword, column_order)
+            
             else:
                 result = {"success": False, "error": f"Unknown cipher: {cipher}"}
             
